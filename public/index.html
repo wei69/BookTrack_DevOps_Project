@@ -3,13 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BookTrack</title>
-    <link rel="stylesheet" href="css/style.css"> <!-- External CSS file -->
+    <title>BookTrack - Add Book</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <!-- Header Section -->
     <div class="header">
         <h1>BookTrack</h1>
+        <button class="add-book-btn" onclick="openForm()">Add Book</button>
     </div>  
+
+    <!-- Overlay to display a semi-transparent background when the form is open, closing form on click -->
+    <div class="overlay" id="overlay" onclick="closeForm()"></div>
+
+    <!-- Container for the 'Add Book' form -->
+    <div class="form-container" id="formContainer">
+        <h2>Add a New Book</h2>
+        <form id="bookForm" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="title">Title:</label>
+                <input type="text" id="title" name="title" required>
+            </div>
+            <div class="form-group">
+                <label for="author">Author:</label>
+                <input type="text" id="author" name="author" required>
+            </div>
+            <div class="form-group">
+                <label for="isbn">ISBN:</label>
+                <input type="text" id="isbn" name="isbn" required>
+            </div>
+            <!-- Form group for genre selection dropdown -->
+            <div class="form-group">
+                <label for="genre">Genre:</label>
+                <select id="genre" name="genre" required>
+                    <option value="" disabled selected>Select Genre</option>
+                    <option value="Fiction">Fiction</option>
+                    <option value="Non-Fiction">Non-Fiction</option>
+                    <option value="Mystery">Mystery</option>
+                    <option value="Science Fiction">Science Fiction</option>
+                    <option value="Fantasy">Fantasy</option>
+                </select>
+            </div>
+            <!-- Form group for inputting available copies -->
+            <div class="form-group">
+                <label for="copies">Available Copies:</label>
+                <input type="number" id="copies" name="copies" min="1" required>
+            </div>
+            <!-- Form group for image file upload -->
+            <div class="form-group">
+                <label for="image">Upload Image:</label>
+                <input type="file" id="image" name="image" accept="image/*" required>
+            </div>
+            <!-- Submit button to add the book -->
+            <button type="submit" class="submit-btn">Add Book</button>
+        </form>
+    </div>
+
+    <!-- Link to the external JavaScript file for form functionality -->
+    <script src="js/Add-Book.js"></script>
 </body>
 </html>
