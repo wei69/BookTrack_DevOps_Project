@@ -49,6 +49,19 @@ async function editBook(bookId) {
     }
 }
 
+// Event listener to handle image preview when a new image is selected
+document.getElementById('editImage').addEventListener('change', function (event) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            const imageElement = document.getElementById('editBookPreviewImage');
+            imageElement.src = e.target.result;
+            imageElement.style.display = 'block'; // Show the preview
+        };
+        reader.readAsDataURL(file);
+    }
+});
 
 // Function to handle update form submission
 document.getElementById('editBookForm').addEventListener('submit', async function (event) {
