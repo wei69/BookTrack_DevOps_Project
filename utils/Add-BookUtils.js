@@ -10,23 +10,6 @@ async function addBook(req, res) {
         // Convert the uploaded file buffer to a Base64 encoded string for the image
         const imageBase64 = req.file.buffer.toString('base64');
 
-        // Check for existing Title
-        const existingTitle = await Book.findOne({ title });
-        if (existingTitle) {
-            return res.status(400).json({ error: 'title_exists' });
-        }
-
-        // Check for existing ISBN
-        const existingISBN = await Book.findOne({ isbn });
-        if (existingISBN) {
-            return res.status(400).json({ error: 'isbn_exists' });
-        }
-
-        // Ensure ISBN is numeric and 13 digits
-        if (!/^\d{13}$/.test(isbn)) {
-            return res.status(400).json({ error: 'isbn_invalid' });
-        }
-
         // Create a new instance of the Book model with the provided data
         const newBook = new Book({
             title,
@@ -38,6 +21,7 @@ async function addBook(req, res) {
         });
 
         await newBook.save(); // Save the new book instance to the database
+
         res.status(201).json({ message: 'Book added successfully!' });
     } catch (error) {
         console.error('Error adding book:', error);
