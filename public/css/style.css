@@ -13,3 +13,88 @@ body {
     justify-content: space-between;
     align-items: center;
 }
+
+.add-book-btn {
+    background-color: white;
+    color: #1b5e20;
+    border: 2px solid #1b5e20;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.add-book-btn:hover {
+    background-color: #1b5e20;
+    color: white;
+}
+
+.form-container {
+    max-width: 500px;
+    width: 90%; 
+    margin: 0 auto;
+    padding: 40px;
+    background-color: white;
+    border: 2px solid black; /* Black border for the dialog */
+    border-radius: 12px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.form-group input,
+.form-group select {
+    width: calc(100% - 20px);
+    padding: 12px;
+    border: 1px solid black; /* Black border for input fields */
+    border-radius: 8px;
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 14px;
+    background-color: #2e7d32;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    margin-top: 10px;
+}
+
+.submit-btn:hover {
+    background-color: #1b5e20;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 500;
+    display: none;
+}
+
+@media (max-width: 600px) {
+    .form-container {
+        width: 95%; 
+    }
+}
