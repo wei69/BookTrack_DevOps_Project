@@ -6,6 +6,7 @@ const multer = require('multer');                // Import multer for handling f
 const mongoose = require('mongoose');            // Import mongoose for MongoDB interaction
 const cors = require('cors');                    // Import cors to enable Cross-Origin Resource Sharing
 const { addBook } = require('./utils/Add-BookUtils'); // Import the addBook function for handling book addition
+const Book = require('./models/Books');           // Import your Book model
 
 // Initialize an Express application
 const app = express();
@@ -21,6 +22,40 @@ app.use(bodyParser.json());
 
 // Serve static files from the 'public' directory (e.g., HTML, CSS, JS)
 app.use(express.static('./public'));
+app.get('/books', async (req, res) => {
+    try {
+        const books = await Book.find(); // Fetch all books from the Book model
+        
+        // Check if no books are found and return a 404 status with a message
+        if (books.length === 0) {
+            return res.status(404).json({ message: 'No books found' });
+        }
+
+        res.status(200).json(books); // Send the books as a JSON response with 200 status
+    } catch (error) {
+        console.error('Error fetching books:', error);
+
+        // Improved error response with status 500 and error message
+        res.status(500).json({ message: 'Server error while fetching books', error: error.message });
+    }
+});
+
+app.get('/search', async (req, res) => {
+    const query = req.query.query.toLowerCase();
+
+    try {
+        // Search for books that match the title
+        const filteredBooks = await Book.find({
+            title: { $regex: query, $options: 'i' } // Case-insensitive search
+        });
+
+        // Return the filtered results
+        res.json(filteredBooks);
+    } catch (error) {
+        console.error('Error fetching books:', error);
+        res.status(500).send('An error occurred while searching for books.');
+    }
+});
 
 // Connect to MongoDB using the MONGODB_URI environment variable from .env file
 mongoose.connect(

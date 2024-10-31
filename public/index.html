@@ -1,5 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
+    <script src="js/getBook.js"></script>
+
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -60,5 +63,38 @@
 
     <!-- Link to the external JavaScript file for form functionality -->
     <script src="js/Add-Book.js"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+
+<body onload="getBooks()">
+    <!-- Header Section -->
+    <div class="header">
+        <h1>BookTrack</h1>
+    </div>
+    <br>
+    <div class="search-container">
+        <div class="input-container">
+            <input type="text" id="searchInput" placeholder="Search books..." oninput="toggleClearButton()">
+            <button id="clearSearchBtn" onclick="clearSearch()" style="display: none;">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <button id="searchbutton" onclick="searchBooks()">Search</button>
+    </div>
+    <div id="loading" style="display: none; text-align: center; font-size: 18px;">
+        Loading books, please wait...
+    </div>
+
+    <div id="bookContainer"></div>
+    <!-- Modal for Book Details -->
+    <div id="bookModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()" style="cursor:pointer;">&times;</span>
+            <div id="modalBookDetailContainer"></div>
+        </div>
+    </div>
+ 
 </body>
+
 </html>
