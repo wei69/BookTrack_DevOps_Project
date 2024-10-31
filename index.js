@@ -42,22 +42,12 @@ app.get('/books', async (req, res) => {
 
 app.get('/search', async (req, res) => {
     const query = req.query.query.toLowerCase();
-    if (!query || typeof query !== 'string') {
-        return res.status(400).json({ error: 'Invalid parameter: "query" is required and must be a string.' });
-    }
-    if (query.length > 100) {
-        return res.status(400).json({ error: 'Query is too long. Max length is 100 characters.' });
-    }
-
 
     try {
         // Search for books that match the title
         const filteredBooks = await Book.find({
             title: { $regex: query, $options: 'i' } // Case-insensitive search
         });
-        if(filteredBooks.length === 0){
-            return res.status(404).json({ error: 'No books found matching your search criteria' });
-        }
 
         // Return the filtered results
         res.json(filteredBooks);
