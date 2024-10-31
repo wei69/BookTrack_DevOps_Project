@@ -5,6 +5,41 @@ function closeForm() {
     document.getElementById('editFormContainer').style.display = 'none';
 }
 
+// Function to validate ISBN
+function isValidISBN(isbn) {
+    // Remove any hyphens
+    isbn = isbn.replace(/-/g, '');
+
+    // Check if the ISBN is 10 or 13 characters long
+    if (isbn.length === 10) {
+        let sum = 0;
+        for (let i = 0; i < 9; i++) {
+            if (isbn[i] < '0' || isbn[i] > '9') return false; // Ensure all characters are digits
+            sum += (i + 1) * parseInt(isbn[i], 10);
+        }
+
+        let checksum = isbn[9];
+        if (checksum === 'X') {
+            sum += 10 * 10;
+        } else if (checksum >= '0' && checksum <= '9') {
+            sum += 10 * parseInt(checksum, 10);
+        } else {
+            return false;
+        }
+        return sum % 11 === 0;
+    } else if (isbn.length === 13) {
+        let sum = 0;
+        for (let i = 0; i < 13; i++) {
+            const digit = parseInt(isbn[i], 10);
+            if (isNaN(digit)) return false; // Ensure all characters are digits
+            sum += i % 2 === 0 ? digit : digit * 3;
+        }
+        return sum % 10 === 0;
+    }
+    return false;
+}
+
+
 // Function to open the update form with current book details
 async function editBook(bookId) {
     if (!bookId) {
@@ -66,6 +101,12 @@ document.getElementById('editImage').addEventListener('change', function (event)
 // Function to handle update form submission
 document.getElementById('editBookForm').addEventListener('submit', async function (event) {
     event.preventDefault(); // Prevent default form submission
+
+    const isbn = document.getElementById('editIsbn').value;
+    if (!isValidISBN(isbn)) {
+        alert('Invalid ISBN. Please enter a valid ISBN-10 or ISBN-13.');
+        return;
+    }
 
     const form = new FormData(this);
     const bookId = document.getElementById('editBookId').value;
