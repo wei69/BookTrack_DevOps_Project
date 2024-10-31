@@ -1,26 +1,35 @@
 function addBookFeature() {
-
-    // Add an event listener for the 'submit' event on the form with ID 'bookForm'
     document.getElementById('bookForm').addEventListener('submit', async function (event) {
-        event.preventDefault(); // Prevent the default form submission behavior to handle it with JavaScript
+        event.preventDefault();
 
-        // Create a new FormData object to collect form data in a structured way
+        // Validate required fields
+        const title = document.getElementById('title').value.trim();
+        const author = document.getElementById('author').value.trim();
+        const isbn = document.getElementById('isbn').value.trim();
+        const genre = document.getElementById('genre').value;
+        const availableCopies = document.getElementById('copies').value;
+        const image = document.getElementById('image').files[0];
+
+        if (!title || !author || !isbn || !genre || !availableCopies || !image) {
+            alert("All fields are required. Please fill in the required fields.");
+            return; // Stop the form submission if any field is missing
+        }
+
+        // Create FormData if all fields are filled
         const form = new FormData();
-        form.append('title', document.getElementById('title').value);
-        form.append('author', document.getElementById('author').value);
-        form.append('isbn', document.getElementById('isbn').value);
-        form.append('genre', document.getElementById('genre').value);
-        form.append('availableCopies', document.getElementById('copies').value);
-        form.append('image', document.getElementById('image').files[0]);
+        form.append('title', title);
+        form.append('author', author);
+        form.append('isbn', isbn);
+        form.append('genre', genre);
+        form.append('availableCopies', availableCopies);
+        form.append('image', image);
 
         try {
-            // Send a POST request to the server to add a new book, passing the form data as the body
             const response = await fetch('http://localhost:5500/addBook', {
                 method: 'POST',
                 body: form,
             });
 
-            // Check if the server response indicates a successful request
             if (response.ok) {
                 alert('Book added successfully!');
                 document.getElementById('bookForm').reset();
@@ -30,21 +39,22 @@ function addBookFeature() {
             }
         } catch (error) {
             console.error('Error:', error);
+            alert('An error occurred while adding the book.');
         }
     });
 }
 
-// Function to display the book form modal and overlay
+// Function to open the form
 function openForm() {
-    document.getElementById('formContainer').style.display = 'block'; // Set the 'formContainer' display style to 'block' to make it visible
-    document.getElementById('overlay').style.display = 'block'; // Set the 'overlay' display style to 'block' to show the overlay background
+    document.getElementById('formContainer').style.display = 'block';
+    document.getElementById('overlay').style.display = 'block';
 }
 
-// Function to hide the book form modal and overlay
+// Function to close the form
 function closeForm() {
-    document.getElementById('formContainer').style.display = 'none'; // Set the 'formContainer' display style to 'none' to hide the form
-    document.getElementById('overlay').style.display = 'none'; // Set the 'overlay' display style to 'none' to hide the overlay background
+    document.getElementById('formContainer').style.display = 'none';
+    document.getElementById('overlay').style.display = 'none';
 }
 
-// Initialize the addBookFeature on load
+// Initialize the addBookFeature function
 addBookFeature();
