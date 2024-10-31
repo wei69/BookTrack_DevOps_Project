@@ -28,6 +28,15 @@ async function editBook(bookId) {
             document.getElementById('editBookId').value = book._id;
             document.getElementById('editImage').value = ''; // Reset image input
 
+            // Set the image preview element if there's an existing image
+            const imageElement = document.getElementById('editBookPreviewImage');
+            if (book.image) {
+                imageElement.src = `data:image/jpeg;base64,${book.image}`;
+                imageElement.style.display = 'block'; // Show the image if it exists
+            } else {
+                imageElement.style.display = 'none'; // Hide the image if not available
+            }
+
             // Display the form
             document.getElementById('editFormContainer').style.display = 'block';
             document.getElementById('overlay').style.display = 'block';

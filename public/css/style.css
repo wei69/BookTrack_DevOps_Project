@@ -280,4 +280,45 @@ button#clearSearchBtn:hover i {
     cursor: pointer;
 }
 
+.form-container {
+    max-width: 800px;
+    width: 90%;
+    margin: 0 auto;
+    padding: 40px;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    animation: fadeIn 0.3s ease-in-out;
+}
 
+.form-content {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+}
+
+.image-preview {
+    max-width: 200px;
+    width: 100%;
+    height: auto;
+}
+
+.form-fields {
+    flex-grow: 1;
+}
+
+@media (max-width: 600px) {
+    .form-content {
+        flex-direction: column;
+    }
+
+    .image-preview {
+        max-width: 100%;
+    }
+}
