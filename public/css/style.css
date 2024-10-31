@@ -31,12 +31,12 @@ body {
 }
 
 .form-container {
-    max-width: 500px;
+    max-width: 600px;
     width: 90%; 
     margin: 0 auto;
     padding: 40px;
     background-color: white;
-    border: 2px solid black; /* Black border for the dialog */
+    border: 2px solid black;
     border-radius: 12px;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
     display: none;
@@ -45,6 +45,36 @@ body {
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 1000;
+}
+
+.form-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.form-content {
+    display: flex;
+    gap: 20px;
+}
+
+.image-preview {
+    width: 200px;
+    height: 300px;
+    border: 2px solid black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f0f0f0;
+}
+
+.image-preview img {
+    max-width: 100%;
+    max-height: 100%;
+    display: block;
+}
+
+.form-fields {
+    flex: 1;
 }
 
 .form-group {
@@ -59,9 +89,9 @@ body {
 
 .form-group input,
 .form-group select {
-    width: calc(100% - 20px);
+    width: 100%;
     padding: 12px;
-    border: 1px solid black; /* Black border for input fields */
+    border: 1px solid black;
     border-radius: 8px;
 }
 
@@ -91,10 +121,4 @@ body {
     background-color: rgba(0, 0, 0, 0.5);
     z-index: 500;
     display: none;
-}
-
-@media (max-width: 600px) {
-    .form-container {
-        width: 95%; 
-    }
 }

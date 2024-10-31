@@ -2,7 +2,6 @@ function addBookFeature() {
     document.getElementById('bookForm').addEventListener('submit', async function (event) {
         event.preventDefault();
 
-        // Validate required fields
         const title = document.getElementById('title').value.trim();
         const author = document.getElementById('author').value.trim();
         const isbn = document.getElementById('isbn').value.trim();
@@ -10,19 +9,16 @@ function addBookFeature() {
         const availableCopies = document.getElementById('copies').value;
         const image = document.getElementById('image').files[0];
 
-        // Check if any field is missing
         if (!title || !author || !isbn || !genre || !availableCopies || !image) {
             alert("All fields are required. Please fill in the required fields.");
-            return; // Stop the form submission if any field is missing
+            return;
         }
 
-        // Validate ISBN format (should be 13-digit number)
         if (!/^\d{13}$/.test(isbn)) {
             alert("ISBN must be a 13-digit number.");
             return;
         }
 
-        // Create FormData if all fields are filled
         const form = new FormData();
         form.append('title', title);
         form.append('author', author);
@@ -43,7 +39,6 @@ function addBookFeature() {
                 closeForm();
             } else {
                 const errorData = await response.json();
-                // Display specific error messages based on the backend response
                 if (errorData.error === 'title_exists') {
                     alert("The title already exists. Please use a unique title.");
                 } else if (errorData.error === 'isbn_exists') {
@@ -59,19 +54,29 @@ function addBookFeature() {
             alert('An error occurred while adding the book.');
         }
     });
+
+    document.getElementById('image').addEventListener('change', function () {
+        const imagePreview = document.getElementById('imagePreview');
+        imagePreview.innerHTML = '';
+        const file = this.files[0];
+        if (file) {
+            const img = document.createElement('img');
+            img.src = URL.createObjectURL(file);
+            imagePreview.appendChild(img);
+        } else {
+            imagePreview.innerHTML = '<span>No Image Selected</span>';
+        }
+    });
 }
 
-// Function to open the form
 function openForm() {
     document.getElementById('formContainer').style.display = 'block';
     document.getElementById('overlay').style.display = 'block';
 }
 
-// Function to close the form
 function closeForm() {
     document.getElementById('formContainer').style.display = 'none';
     document.getElementById('overlay').style.display = 'none';
 }
 
-// Initialize the addBookFeature function
 addBookFeature();
