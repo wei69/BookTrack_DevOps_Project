@@ -39,27 +39,7 @@ app.get('/books', async (req, res) => {
         res.status(500).json({ message: 'Server error while fetching books', error: error.message });
     }
 });
-app.get('/books/:id', async (req, res) => {
-    const { id } = req.params; // Get the ID from the route parameters
-    const sanitizedId = id.trim();
 
-
-    // Check if the provided ID is a valid MongoDB ObjectId
-    if (!mongoose.isValidObjectId(sanitizedId)) {
-        return res.status(400).send('Invalid book ID format');
-    }
-
-    try {
-        const book = await Book.findById(sanitizedId); // Use the Book model to fetch the book by ID
-        if (!book) {
-            return res.status(404).send('Book not found'); // If no book found, send 404 status
-        }
-        res.json(book); // Send the book as a JSON response
-    } catch (error) {
-        console.error('Error fetching book by ID:', error);
-        res.status(500).send('Server error');
-    }
-});
 app.get('/search', async (req, res) => {
     const query = req.query.query.toLowerCase();
     if (!query || typeof query !== 'string') {
