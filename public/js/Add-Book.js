@@ -22,6 +22,7 @@ function addBookFeature() {
             return;
         }
 
+
         // Create FormData if all fields are filled
         const form = new FormData();
         form.append('title', title);

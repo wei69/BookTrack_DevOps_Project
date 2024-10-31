@@ -1,5 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
+    <script src="js/getBook.js"></script>
+
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -30,11 +33,25 @@
             <div class="form-group">
                 <label for="isbn">ISBN:</label>
                 <input type="text" id="isbn" name="isbn" >
+
+                <input type="text" id="title" name="title">
+            </div>
+            <div class="form-group">
+                <label for="author">Author:</label>
+                <input type="text" id="author" name="author">
+            </div>
+            <div class="form-group">
+                <label for="isbn">ISBN:</label>
+                <input type="text" id="isbn" name="isbn">
             </div>
             <!-- Form group for genre selection dropdown -->
             <div class="form-group">
                 <label for="genre">Genre:</label>
+
                 <select id="genre" name="genre" >
+
+                <select id="genre" name="genre">
+
                     <option value="" disabled selected>Select Genre</option>
                     <option value="Fiction">Fiction</option>
                     <option value="Non-Fiction">Non-Fiction</option>
@@ -46,12 +63,17 @@
             <!-- Form group for inputting available copies -->
             <div class="form-group">
                 <label for="copies">Available Copies:</label>
+ 
                 <input type="number" id="copies" name="copies" min="1" >
+
+                <input type="number" id="copies" name="copies" min="1">
             </div>
             <!-- Form group for image file upload -->
             <div class="form-group">
                 <label for="image">Upload Image:</label>
                 <input type="file" id="image" name="image" accept="image/*" >
+
+                <input type="file" id="image" name="image" accept="image/*">
             </div>
             <!-- Submit button to add the book -->
             <button type="submit" class="submit-btn">Add Book</button>
@@ -60,5 +82,36 @@
 
     <!-- Link to the external JavaScript file for form functionality -->
     <script src="js/Add-Book.js"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+
+<body onload="getBooks()">
+    <!-- Header Section -->
+    
+    <br>
+    <div class="search-container">
+        <div class="input-container">
+            <input type="text" id="searchInput" placeholder="Search books..." oninput="toggleClearButton()">
+            <button id="clearSearchBtn" onclick="clearSearch()" style="display: none;">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <button id="searchbutton" onclick="searchBooks()">Search</button>
+    </div>
+    <div id="loading" style="display: none; text-align: center; font-size: 18px;">
+        Loading books, please wait...
+    </div>
+
+    <div id="bookContainer"></div>
+    <!-- Modal for Book Details -->
+    <div id="bookModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()" style="cursor:pointer;">&times;</span>
+            <div id="modalBookDetailContainer"></div>
+        </div>
+    </div>
+ 
 </body>
+
 </html>

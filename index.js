@@ -6,6 +6,8 @@ const multer = require('multer');                // Import multer for handling f
 const mongoose = require('mongoose');            // Import mongoose for MongoDB interaction
 const cors = require('cors');                    // Import cors to enable Cross-Origin Resource Sharing
 const { addBook } = require('./utils/Add-BookUtils'); // Import the addBook function for handling book addition
+const Book = require('./models/Books');           // Import your Book model
+const { getBooks, searchBooks } = require('./utils/getBookUtils'); // Import the getBooks function for fetching books
 
 // Initialize an Express application
 const app = express();
@@ -22,6 +24,9 @@ app.use(bodyParser.json());
 // Serve static files from the 'public' directory (e.g., HTML, CSS, JS)
 app.use(express.static('./public'));
 
+
+
+
 // Connect to MongoDB using the MONGODB_URI environment variable from .env file
 mongoose.connect(
     process.env.MONGODB_URI,
@@ -33,6 +38,8 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage: storage }); // Create an upload handler with memory storage
 
 app.post('/addBook', upload.single('image'), addBook);// Define a POST route for adding a new book, expecting a single file upload under the 'image' field
+app.get('/books', getBooks); // Use the getBooks function directly
+app.get('/search', searchBooks); // Define a route for searching books
 
 // Define a route to serve the main HTML page at the root URL
 app.get('/', (req, res) => {
