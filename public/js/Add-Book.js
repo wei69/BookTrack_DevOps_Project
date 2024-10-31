@@ -10,10 +10,18 @@ function addBookFeature() {
         const availableCopies = document.getElementById('copies').value;
         const image = document.getElementById('image').files[0];
 
+        // Check if any field is missing
         if (!title || !author || !isbn || !genre || !availableCopies || !image) {
             alert("All fields are required. Please fill in the required fields.");
             return; // Stop the form submission if any field is missing
         }
+
+        // Validate ISBN format (should be 13-digit number)
+        if (!/^\d{13}$/.test(isbn)) {
+            alert("ISBN must be a 13-digit number.");
+            return;
+        }
+
 
         // Create FormData if all fields are filled
         const form = new FormData();
@@ -35,7 +43,17 @@ function addBookFeature() {
                 document.getElementById('bookForm').reset();
                 closeForm();
             } else {
-                alert('Failed to add book.');
+                const errorData = await response.json();
+                // Display specific error messages based on the backend response
+                if (errorData.error === 'title_exists') {
+                    alert("The title already exists. Please use a unique title.");
+                } else if (errorData.error === 'isbn_exists') {
+                    alert("The ISBN already exists. Please use a unique ISBN.");
+                } else if (errorData.error === 'isbn_invalid') {
+                    alert("ISBN must be a 13-digit number.");
+                } else {
+                    alert('Failed to add book.');
+                }
             }
         } catch (error) {
             console.error('Error:', error);
