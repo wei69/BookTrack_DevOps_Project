@@ -8,7 +8,7 @@ const cors = require('cors');                             // Import cors to enab
 const { addBook , addTransaction} = require('./utils/Add-BookUtils');     // Import the addBook function for handling book addition
 const { updateBook } = require('./utils/updateBookUtil'); // Import the utility functions for updating books
 const Book = require('./models/Books');                   // Import your Book model
-const { getBooks, searchBooks } = require('./utils/getBookUtils'); // Import the getBooks function for fetching books
+const { getBooks, searchBooks,fetchBookById } = require('./utils/getBookUtils'); // Import the getBooks function for fetching books
 
 // Initialize an Express application
 const app = express();
@@ -43,6 +43,8 @@ app.get('/books', getBooks); // Use the getBooks function directly
 app.get('/search', searchBooks); // Define a route for searching books
 
 // Define a PUT route for updating a book by ID
+app.get('/books/:id', fetchBookById);
+
 app.put('/updateBook/:id', upload.single('image'), updateBook);
 
 app.post('/addTransaction', addTransaction);
