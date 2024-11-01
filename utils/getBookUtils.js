@@ -54,6 +54,7 @@ function escapeRegex(text) {
     return text.replace(/[-\/\\^$.*+?()[\]{}|]/g, '\\$&'); // Escape special characters
 }
 
+// Define an asynchronous function to fetch a book by ID
 async function fetchBookById(req, res) {
     const { id } = req.params; // Get the ID from the route parameters
     const sanitizedId = id.trim();
