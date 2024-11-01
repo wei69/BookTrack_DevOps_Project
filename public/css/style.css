@@ -45,32 +45,46 @@ body {
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 1000;
+    text-align: center;
 }
 
 .form-header {
-    text-align: center;
     margin-bottom: 20px;
 }
 
 .form-content {
     display: flex;
-    gap: 20px;
+    gap: 30px;
+}
+
+.image-preview-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 200px;
 }
 
 .image-preview {
-    width: 200px;
+    width: 100%;
     height: 300px;
     border: 2px solid black;
     display: flex;
     justify-content: center;
     align-items: center;
     background-color: #f0f0f0;
+    padding: 10px;
+    overflow: hidden;
 }
 
 .image-preview img {
-    max-width: 100%;
-    max-height: 100%;
-    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensures the image fully fills the box */
+}
+
+.file-input {
+    margin-top: 10px;
+    width: 100%;
 }
 
 .form-fields {
@@ -79,6 +93,7 @@ body {
 
 .form-group {
     margin-bottom: 15px;
+    text-align: left;
 }
 
 .form-group label {
@@ -95,21 +110,27 @@ body {
     border-radius: 8px;
 }
 
+.button-container {
+    text-align: center;
+    margin-top: 20px;
+}
+
 .submit-btn {
-    width: 100%;
+    width: 200px;
     padding: 14px;
     background-color: #2e7d32;
     color: white;
-    border: none;
+    border: 2px solid #2e7d32;
     border-radius: 8px;
     cursor: pointer;
     font-weight: bold;
-    transition: background-color 0.3s ease;
-    margin-top: 10px;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .submit-btn:hover {
     background-color: #1b5e20;
+    border-color: #1b5e20;
+    color: white;
 }
 
 .overlay {
