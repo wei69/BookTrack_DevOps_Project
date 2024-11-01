@@ -29,8 +29,22 @@ function addTransaction() {
         return;
     }
 
-    if(isNaN(book_id)){
-        displayMessage("book_id must be in number")
+    const isValidObjectId = /^[0-9a-fA-F]{24}$/.test(book_id);
+    if (!isValidObjectId) {
+        displayMessage("Invalid book_id format. It must be a 24-character hex string.", "error");
+        return;
+    }
+
+    const borrowDateObj = new Date(borrowDate);
+    const returnDateObj = new Date(returnDate);
+
+    if (isNaN(borrowDateObj.getTime()) || isNaN(returnDateObj.getTime())) {
+        displayMessage("Invalid date format for borrow or return date.", "error");
+        return;
+    }
+    
+    if (returnDateObj <= borrowDateObj) {
+        displayMessage("Return date must be after borrow date.", "error");
         return;
     }
     
