@@ -9,6 +9,7 @@ const { addBook } = require('./utils/Add-BookUtils'); // Import the addBook func
 const Book = require('./models/Books');           // Import your Book model
 const { getBooks, searchBooks,fetchBookById } = require('./utils/getBookUtils'); // Import the getBooks function for fetching books
 
+
 // Initialize an Express application
 const app = express();
 const PORT = process.env.PORT || 5500; // Set the server port from environment variables or default to 5500
@@ -43,6 +44,10 @@ app.get('/search', searchBooks); // Define a route for searching books
 app.get('/books/:id', fetchBookById);
 
 
+// Define a PUT route for updating a book by ID
+app.put('/updateBook/:id', upload.single('image'), updateBook);
+
+app.post('/addTransaction', addTransaction);
 // Define a route to serve the main HTML page at the root URL
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/public/' + startPage); // Send the 'index.html' file as a response
