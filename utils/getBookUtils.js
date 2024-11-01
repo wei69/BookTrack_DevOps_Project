@@ -22,15 +22,18 @@ async function getBooks(req, res) {
 async function searchBooks(req, res) {
     const query = req.query.query?.toLowerCase(); // Use optional chaining to safely access query
 
-    // Check if the query is provided
-    if (!query || query.trim() === '') {
-        return res.status(400).json({ message: 'Search query is required.' });
+    // Check if the query is provided and valid
+    if (!query || typeof query !== 'string' || query.trim() === '') {
+        return res.status(400).json({ error: 'Invalid parameter: "query" is required and must be a non-empty string.' });
+    }
+    if (query.length > 100) {
+        return res.status(400).json({ error: 'Query is too long. Max length is 100 characters.' });
     }
 
     try {
-        // Search for books that match the title
+        // Search for books that match the title (consider expanding to other fields if needed)
         const filteredBooks = await Book.find({
-            title: { $regex: query, $options: 'i' } // Case-insensitive search
+            title: { $regex: escapeRegex(query), $options: 'i' } // Case-insensitive search with escaped query
         });
 
         // Check if any books are found
@@ -45,6 +48,12 @@ async function searchBooks(req, res) {
         res.status(500).json({ message: 'An error occurred while searching for books.', error: error.message });
     }
 }
+
+// Function to escape regex special characters
+function escapeRegex(text) {
+    return text.replace(/[-\/\\^$.*+?()[\]{}|]/g, '\\$&'); // Escape special characters
+}
+
 
 // Export the searchBooks function to make it available in other parts of the application
 // Export the getBooks function to make it available in other parts of the application
