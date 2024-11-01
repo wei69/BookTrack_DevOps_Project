@@ -42,7 +42,7 @@ async function addBook(req, res) {
         });
 
         await newBook.save(); // Save the new book instance to the database
-        res.status(201).json({ message: 'Book added successfully!' });
+        res.status(201).json({ message: 'Book added successfully' });
     } catch (error) {
         console.error('Error adding book:', error);
         res.status(500).json({ error: 'An error occurred while adding the book.' });
