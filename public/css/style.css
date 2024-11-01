@@ -171,29 +171,18 @@ body {
     text-align: left; /* Align paragraph text to the left */
 }
 
-input[type=button] {
-width: 30%; /* Adjust the width as needed */
-background-color: #4CAF50;
-color: white;
-padding: 8px 10px; /* Adjust padding as needed */
-margin: 8px 0;
-border: none;
-border-radius: 4px;
-cursor: pointer;
-}
-
-.search-container {
+#search-container {
     display: flex;
     justify-content: center; /* Center the search box */
     align-items: center; /* Vertically center the search box */
     gap: 10px; /* Space between input and buttons */
 }
 
-.input-container {
+#input-container {
     position: relative; /* Position relative for absolute positioning of the clear button */
 }
 
-input[type="text"] {
+#searchInput {
     width: 300px; /* Set a fixed width for the input */
     padding: 10px; /* Padding inside the input */
     border: 1px solid #ced4da; /* Light gray border */
@@ -202,12 +191,36 @@ input[type="text"] {
     transition: border-color 0.3s; /* Smooth transition for border color */
 }
 
-input[type="text"]:focus {
+#searchInput:focus {
     border-color: #4CAF50; /* Blue border on focus */
     outline: none; /* Remove default outline */
 }
 
-button {
+
+#editBtn {
+    padding: 10px 15px; /* Padding inside the button */
+    background-color: #4CAF50; /* Green background */
+    color: white; /* White text color */
+    border: none; /* No border */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    font-size: 16px; /* Font size */
+    transition: background-color 0.3s, transform 0.2s; /* Smooth transition for background and scale */
+}
+
+#editBtn:hover {
+    background-color: #45a049; /* Darker green on hover */
+    transform: scale(1.05); /* Slightly enlarge button on hover */
+}
+
+#editBtn:focus {
+    outline: none; /* Remove default outline */
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.5); /* Add a glow effect */
+}
+
+#searchButton {
+    background-color: #4CAF50; /* Blue background */
+    color: white; /* White text */
     padding: 10px 15px; /* Padding for the buttons */
     border: none; /* Remove default border */
     border-radius: 5px; /* Rounded corners */
@@ -216,16 +229,11 @@ button {
     transition: background-color 0.3s; /* Smooth transition for background color */
 }
 
-button#searchbutton {
-    background-color: #4CAF50; /* Blue background */
-    color: white; /* White text */
-}
-
-button#searchbutton:hover {
+#searchButton:hover {
     background-color: #4CAF50; /* Darker blue on hover */
 }
 
-button#clearSearchBtn {
+#clearSearchBtn {
     position: absolute; /* Absolute positioning to overlap input */
     right: 5px; /* Position it inside the input */
     top: 50%; /* Center vertically */
@@ -235,14 +243,15 @@ button#clearSearchBtn {
     cursor: pointer; /* Pointer cursor */
 }
 
-button#clearSearchBtn i {
+#clearSearchBtn i {
     color: #ced4da; /* Light gray icon color */
     font-size: 18px; /* Icon size */
 }
 
-button#clearSearchBtn:hover i {
+#clearSearchBtn:hover i {
     color: #dc3545; /* Red icon on hover */
 }
+
 
 .modal {
     display: none; 
@@ -371,8 +380,8 @@ label {
     margin: 10px 0 5px;
 }
 
-input[type="text"],
-input[type="date"] {
+.modal-container input[type="text"],
+.modal-container input[type="date"] {
     width: 100%;
     padding: 8px;
     margin-bottom: 10px;
@@ -380,15 +389,35 @@ input[type="date"] {
     border-radius: 4px;
 }
 
-button {
+
+#submitBtn {
+    background-color: #4CAF50; /* Green background */
+    color: white;              /* White text color */
+    padding: 10px 15px;       /* Padding for the button */
+    border: none;             /* Remove default border */
+    border-radius: 4px;      /* Rounded corners */
+    cursor: pointer;          /* Change cursor on hover */
+    font-size: 16px;          /* Increase font size */
+    transition: background-color 0.3s; /* Smooth transition */
+}
+
+#submitBtn:hover {
+    background-color: #45a049; /* Darker green on hover */
+}
+
+.overlay, .modal-overlay {
+    position: fixed; /* Ensure it covers the whole viewport */
+    top: 0;
+    left: 0;
     width: 100%;
-    padding: 10px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    z-index: 1000; /* Make sure the overlay is on top */
+}
+
+.modal-container {
+    position: relative; /* Keep modal content position relative to overlay */
+    z-index: 1001; /* Modal should be above the overlay */
 }
 
 button:hover {

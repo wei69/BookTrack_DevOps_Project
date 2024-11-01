@@ -67,27 +67,28 @@
 
     <!-- Modal overlay and form container -->
     <div class="modal-overlay" id="modalOverlay">
-        <div class="modal-container">
-            <span class="close-btn" onclick="closeModal()">&times;</span>
-            <h1 class="form-title">Library Book Borrowing Form</h1>
-            <form id="transactionForm">
-                <label for="book_id">Book ID</label>
-                <input type="text" id="book_id" name="book_id" placeholder="Enter Book ID" required>
+    <div class="modal-container">
+        <span id="closeBtn" class="close-btn" onclick="closeModal()">&times;</span>
+        <h1 id="formTitle" class="form-title">Library Book Borrowing Form</h1>
+        <form id="transactionForm">
+            <label for="book_id">Book ID</label>
+            <input type="text" id="book_id" name="book_id" placeholder="Enter Book ID" required>
 
-                <label for="borrower_name">Borrower Name</label>
-                <input type="text" id="borrower_name" name="borrower_name" placeholder="Enter Borrower Name" required>
+            <label for="borrower_name">Borrower Name</label>
+            <input type="text" id="borrower_name" name="borrower_name" placeholder="Enter Borrower Name" required>
 
-                <label for="borrowDate">Borrow Date</label>
-                <input type="date" id="borrowDate" name="borrowDate" required>
+            <label for="borrowDate">Borrow Date</label>
+            <input type="date" id="borrowDate" name="borrowDate" required>
 
-                <label for="returnDate">Return Date</label>
-                <input type="date" id="returnDate" name="returnDate" required>
+            <label for="returnDate">Return Date</label>
+            <input type="date" id="returnDate" name="returnDate" required>
 
-                <button type="button" onclick="addTransaction()">Submit</button>
-            </form>
-            <p id="message" class="message"></p>
-        </div>
+            <button id="submitBtn" type="button" onclick="addTransaction()">Submit</button>
+        </form>
+        <p id="message" class="message"></p>
     </div>
+</div>
+
 
 
 
@@ -100,15 +101,16 @@
 <body onload="getBooks()">
   
     <br>
-    <div class="search-container">
-        <div class="input-container">
+    <div id="search-container">
+        <div id="input-container">
             <input type="text" id="searchInput" placeholder="Search books..." oninput="toggleClearButton()">
             <button id="clearSearchBtn" onclick="clearSearch()" style="display: none;">
                 <i class="fas fa-times"></i>
             </button>
         </div>
-        <button id="searchbutton" onclick="searchBooks()">Search</button>
+        <button id="searchButton" onclick="searchBooks()">Search</button>
     </div>
+    
     <div id="loading" style="display: none; text-align: center; font-size: 18px;">
         Loading books, please wait...
     </div>
