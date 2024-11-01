@@ -70,7 +70,6 @@ function displayBooks(books) {
                     <p id='availableCopies' style='font-family: Helvetica;'><strong>Available Copies:</strong> ${book.availableCopies}</p>
                     <div class='button-container' style='margin-top: 10px;'>
                         <input type='button' onclick='editBook("${book._id}")' value='Edit' style='margin: 5px;'>
-                        <input type='button' onclick='getBookById(this.getAttribute("bookId"))' bookId='${book._id}' value='View' style='margin: 5px;'>
 
                     </div>
                 </div>
@@ -84,7 +83,39 @@ function displayBooks(books) {
     bookContainer.innerHTML = html;
 }
 // Function to fetch a book by ID
+function getBookById(bookId) {
+    if (!bookId || typeof bookId !== 'string' || bookId.trim() === '') {
+        alert('Invalid book ID. Please provide a valid ID.');
+        return;
+    }
 
+    const request = new XMLHttpRequest();
+    request.open('GET', `http://localhost:5500/books/${bookId}`, true);
+
+    request.onload = function () {
+        // Check if the request was successful
+        if (request.status >= 200 && request.status < 300) {
+            const book = JSON.parse(request.responseText);
+            displayBookDetails(book); // Call displayBookDetails to render the book details
+        } else if (request.status === 400) {
+            alert('Invalid book ID format. Please check the ID and try again.');
+            console.error('Invalid book ID format:', request.statusText);
+        } else if (request.status === 404) {
+            alert('Book not found. It may have been removed.');
+            console.error('Book not found:', request.statusText);
+        } else {
+            alert('Failed to retrieve book details. Please try again later.');
+            console.error('Failed to fetch book:', request.statusText);
+        }
+    };
+
+    request.onerror = function () {
+        console.error('Network error while fetching book');
+        alert('An error occurred while fetching the book. Please check the console for details.');
+    };
+
+    request.send();
+}
 // Call getBooks when needed, e.g., on page load or button click
 
 
