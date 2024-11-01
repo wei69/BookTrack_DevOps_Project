@@ -2,6 +2,7 @@ function addBookFeature() {
     document.getElementById('bookForm').addEventListener('submit', async function (event) {
         event.preventDefault();
 
+        // Get field values and check if they meet requirements
         const title = document.getElementById('title').value.trim();
         const author = document.getElementById('author').value.trim();
         const isbn = document.getElementById('isbn').value.trim();
@@ -9,6 +10,7 @@ function addBookFeature() {
         const availableCopies = document.getElementById('copies').value;
         const image = document.getElementById('image').files[0];
 
+        // Front-end validations
         if (!title || !author || !isbn || !genre || !availableCopies || !image) {
             alert("All fields are required. Please fill in the required fields.");
             return;
@@ -19,6 +21,7 @@ function addBookFeature() {
             return;
         }
 
+        // Prepare form data for backend validation
         const form = new FormData();
         form.append('title', title);
         form.append('author', author);
@@ -28,16 +31,14 @@ function addBookFeature() {
         form.append('image', image);
 
         try {
+            // Perform backend validation by sending data to the server without final confirmation
             const response = await fetch('http://localhost:5500/addBook', {
                 method: 'POST',
                 body: form,
             });
 
-            if (response.ok) {
-                alert('Book added successfully!');
-                document.getElementById('bookForm').reset();
-                closeForm();
-            } else {
+            // Check backend validation responses
+            if (!response.ok) {
                 const errorData = await response.json();
                 if (errorData.error === 'title_exists') {
                     alert("The title already exists. Please use a unique title.");
@@ -48,6 +49,15 @@ function addBookFeature() {
                 } else {
                     alert('Failed to add book.');
                 }
+                return; // Stop if backend validation fails
+            }
+
+            // If both frontend and backend validations pass, show confirmation
+            const userConfirmed = confirm("Are you sure you want to add this book?");
+            if (userConfirmed) {
+                alert('Book added successfully!');
+                document.getElementById('bookForm').reset();
+                closeForm();
             }
         } catch (error) {
             console.error('Error:', error);
@@ -55,6 +65,7 @@ function addBookFeature() {
         }
     });
 
+    // Image preview functionality
     document.getElementById('image').addEventListener('change', function () {
         const imagePreview = document.getElementById('imagePreview');
         imagePreview.innerHTML = '';
@@ -69,6 +80,7 @@ function addBookFeature() {
     });
 }
 
+// Functions to open and close the form
 function openForm() {
     document.getElementById('formContainer').style.display = 'block';
     document.getElementById('overlay').style.display = 'block';
