@@ -9,7 +9,7 @@ function displayMessage(message, type) {
         messageElement.style.color = "green"; // Success message color
     } else if (type === "error") {
         messageElement.style.color = "red"; // Error message color
-    }
+    } 
 
     // Hide the message after a few seconds
     setTimeout(() => {
@@ -29,6 +29,11 @@ function addTransaction() {
         return;
     }
 
+    if(isNaN(book_id)){
+        displayMessage("book_id must be in number")
+        return;
+    }
+    
     const transactionData = { book_id, borrower_name, borrowDate, returnDate };
 
     // Send transaction data to server
