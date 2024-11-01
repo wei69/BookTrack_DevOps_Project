@@ -10,9 +10,13 @@ async function addBook(req, res) {
         // Convert the uploaded file buffer to a Base64 encoded string for the image
         const imageBase64 = req.file.buffer.toString('base64');
 
-        // Check for existing Title
-        const existingTitle = await Book.findOne({ title });
-        if (existingTitle) {
+        // Fetch all existing titles, normalize them, and store in an array
+        const existingTitles = await Book.find({}, 'title');
+        const normalizedTitles = existingTitles.map(book => book.title.toLowerCase().trim());
+
+        // Check if the normalized input title exists in the array of normalized titles
+        const normalizedInputTitle = title.toLowerCase().trim();
+        if (normalizedTitles.includes(normalizedInputTitle)) {
             return res.status(400).json({ error: 'title_exists' });
         }
 
