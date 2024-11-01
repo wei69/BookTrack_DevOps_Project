@@ -1,5 +1,6 @@
 // Import the Book model to interact with the database
 const Book = require('../models/Books.js');
+const mongoose = require('mongoose'); // Import mongoose to validate object IDs
 
 // Define an asynchronous function to handle getting books
 async function getBooks(req, res) {
@@ -57,14 +58,27 @@ function escapeRegex(text) {
 // Define an asynchronous function to fetch a book by ID
 async function fetchBookById(req, res) {
     const { id } = req.params; // Get the ID from the route parameters
-    const sanitizedId = id.trim();
+    const sanitizedId = id.trim(); // Trim any whitespace from the ID
 
     // Check if the provided ID is a valid MongoDB ObjectId
     if (!mongoose.isValidObjectId(sanitizedId)) {
         return res.status(400).send('Invalid book ID format');
     }
 
+    try {
+        const book = await Book.findById(sanitizedId); // Fetch the book by ID
+        if (!book) {
+            return res.status(404).send('Book not found'); // If no book is found, return a 404 status
+        }
+        res.json(book); // Send the book as a JSON response
+    } catch (error) {
+        console.error('Error fetching book by ID:', error);
+        res.status(500).send('Server error'); // Handle any server errors
+    }
+}
+
+// Export the function to make it available for use in your routes
 
 // Export the searchBooks function to make it available in other parts of the application
 // Export the getBooks function to make it available in other parts of the application
-module.exports = { getBooks,searchBooks };
+module.exports = { getBooks,searchBooks,fetchBookById };
