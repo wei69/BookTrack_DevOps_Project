@@ -70,7 +70,6 @@ function displayBooks(books) {
                     <p id='availableCopies' style='font-family: Helvetica;'><strong>Available Copies:</strong> ${book.availableCopies}</p>
                     <div class='button-container' style='margin-top: 10px;'>
                         <input type='button' onclick='editBook("${book._id}")' value='Edit' style='margin: 5px;'>
-                        <input type='button' onclick='getBookById(this.getAttribute("bookId"))' bookId='${book._id}' value='View' style='margin: 5px;'>
 
                     </div>
                 </div>
