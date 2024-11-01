@@ -11,6 +11,7 @@ function addBookFeature() {
         const image = document.getElementById('image').files[0];
 
         // Front-end validations
+
         if (!title || !author || !isbn || !genre || !availableCopies || !image) {
             alert("All fields are required. Please fill in the required fields.");
             return;
@@ -22,6 +23,8 @@ function addBookFeature() {
         }
 
         // Prepare form data for backend validation
+
+        // Create FormData if all fields are filled
         const form = new FormData();
         form.append('title', title);
         form.append('author', author);
@@ -58,6 +61,13 @@ function addBookFeature() {
                 alert('Book added successfully!');
                 document.getElementById('bookForm').reset();
                 closeForm();
+
+            if (response.ok) {
+                alert('Book added successfully!');
+                document.getElementById('bookForm').reset();
+                closeForm();
+            } else {
+                alert('Failed to add book.');
             }
         } catch (error) {
             console.error('Error:', error);
