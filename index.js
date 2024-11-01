@@ -43,7 +43,9 @@ app.get('/books', getBooks); // Use the getBooks function directly
 app.get('/search', searchBooks); // Define a route for searching books
 
 // Define a PUT route for updating a book by ID
+app.put('/updateBook/:id', upload.single('image'), updateBook);
 
+app.post('/addTransaction', addTransaction);
 // Define a route to serve the main HTML page at the root URL
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/public/' + startPage); // Send the 'index.html' file as a response
