@@ -7,7 +7,7 @@ const mongoose = require('mongoose');            // Import mongoose for MongoDB 
 const cors = require('cors');                    // Import cors to enable Cross-Origin Resource Sharing
 const { addBook } = require('./utils/Add-BookUtils'); // Import the addBook function for handling book addition
 const Book = require('./models/Books');           // Import your Book model
-const { getBooks, searchBooks } = require('./utils/getBookUtils'); // Import the getBooks function for fetching books
+const { getBooks, searchBooks,fetchBookById } = require('./utils/getBookUtils'); // Import the getBooks function for fetching books
 
 // Initialize an Express application
 const app = express();
@@ -40,6 +40,8 @@ const upload = multer({ storage: storage }); // Create an upload handler with me
 app.post('/addBook', upload.single('image'), addBook);// Define a POST route for adding a new book, expecting a single file upload under the 'image' field
 app.get('/books', getBooks); // Use the getBooks function directly
 app.get('/search', searchBooks); // Define a route for searching books
+app.get('/books/:id', fetchBookById);
+
 
 // Define a route to serve the main HTML page at the root URL
 app.get('/', (req, res) => {
