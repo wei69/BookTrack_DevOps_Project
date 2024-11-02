@@ -5,7 +5,6 @@ body {
     padding: 0;
 }
 
-
 .header {
     background-color: #1b5e20;
     color: white;
@@ -15,28 +14,13 @@ body {
     align-items: center;
 }
 
-.add-book-btn {
-    background-color: white;
-    color: #1b5e20;
-    border: 2px solid #1b5e20;
-    padding: 10px 20px;
-    cursor: pointer;
-    border-radius: 5px;
-    font-weight: bold;
-    transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-.add-book-btn:hover {
-    background-color: #1b5e20;
-    color: white;
-}
-
-.form-container {
-    max-width: 500px;
+.form-container-addbook {
+    max-width: 800px;
     width: 90%; 
     margin: 0 auto;
     padding: 40px;
     background-color: white;
+    border: 2px solid black;
     border-radius: 12px;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
     display: none;
@@ -45,11 +29,55 @@ body {
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 1000;
-    animation: fadeIn 0.3s ease-in-out;
+    text-align: center;
+}
+
+.form-header {
+    margin-bottom: 20px;
+}
+
+.form-content {
+    display: flex;
+    gap: 60px;
+}
+
+.image-preview-container-addbook {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 200px;
+}
+
+.image-preview-addbook {
+    width: 100%;
+    height: 300px;
+    border: 2px solid black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f0f0f0;
+    padding: 10px;
+    overflow: hidden;
+}
+
+.image-preview-addbook img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensures the image fully fills the box */
+}
+
+.file-input.addbook {
+    margin-top: 10px;
+    width: 100%;
+}
+
+.form-fields-addbook {
+    flex: 0.75;
 }
 
 .form-group {
     margin-bottom: 15px;
+    text-align: left;
 }
 
 .form-group label {
@@ -58,28 +86,35 @@ body {
     display: block;
 }
 
-.form-group input, .form-group select {
-    width: calc(100% - 20px);
+.form-group input,
+.form-group select {
+    width: 100%;
     padding: 12px;
-    border: 1px solid #ccc;
+    border: 1px solid black;
     border-radius: 8px;
 }
 
+.button-container {
+    text-align: center;
+    margin-top: 20px;
+}
+
 .submit-btn {
-    width: 100%;
+    width: 200px;
     padding: 14px;
     background-color: #2e7d32;
     color: white;
-    border: none;
+    border: 2px solid #2e7d32;
     border-radius: 8px;
     cursor: pointer;
     font-weight: bold;
-    transition: background-color 0.3s ease;
-    margin-top: 10px;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .submit-btn:hover {
     background-color: #1b5e20;
+    border-color: #1b5e20;
+    color: white;
 }
 
 .overlay {
@@ -92,6 +127,8 @@ body {
     z-index: 500;
     display: none;
 }
+
+
 
 @keyframes fadeIn {
     from {
@@ -373,6 +410,7 @@ body {
 .form-title {
     margin: 0 0 15px;
     text-align: center;
+    margin-top: 20px;
 }
 
 label {
