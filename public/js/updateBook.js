@@ -102,6 +102,11 @@ document.getElementById('editImage').addEventListener('change', function (event)
 document.getElementById('editBookForm').addEventListener('submit', async function (event) {
     event.preventDefault(); // Prevent default form submission
 
+    const isConfirmed = confirm("Are you sure you want to update the book details?");
+    if (!isConfirmed) {
+        return; // Exit function if user does not confirm
+    }
+
     const isbn = document.getElementById('editIsbn').value;
     if (!isValidISBN(isbn)) {
         alert('Invalid ISBN. Please enter a valid ISBN-10 or ISBN-13.');
