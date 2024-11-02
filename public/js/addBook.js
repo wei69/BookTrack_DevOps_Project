@@ -21,6 +21,15 @@ function addBookFeature() {
             return;
         }
 
+        // Ask for confirmation before sending data to the server
+        const userConfirmed = confirm("Are you sure you want to add this book?");
+        if (!userConfirmed) {
+            // If the user cancels, reset the form and close the dialog
+            resetForm();
+            closeForm();
+            return;
+        }
+
         // Prepare form data for backend validation
         const form = new FormData();
         form.append('title', title);
@@ -31,7 +40,7 @@ function addBookFeature() {
         form.append('image', image);
 
         try {
-            // Perform backend validation by sending data to the server without final confirmation
+            // Send data to the server after confirmation
             const response = await fetch('http://localhost:5500/addBook', {
                 method: 'POST',
                 body: form,
@@ -52,13 +61,9 @@ function addBookFeature() {
                 return; // Stop if backend validation fails
             }
 
-            // If both frontend and backend validations pass, show confirmation
-            const userConfirmed = confirm("Are you sure you want to add this book?");
-            if (userConfirmed) {
-                alert('Book added successfully!');
-                document.getElementById('bookForm').reset();
-                closeForm();
-            }
+            alert('Book added successfully!');
+            resetForm();
+            closeForm();
         } catch (error) {
             console.error('Error:', error);
             alert('An error occurred while adding the book.');
@@ -80,6 +85,13 @@ function addBookFeature() {
     });
 }
 
+// Helper function to reset the form and clear the image preview
+function resetForm() {
+    document.getElementById('bookForm').reset(); // Clear all form fields
+    const imagePreview = document.getElementById('imagePreview');
+    imagePreview.innerHTML = '<span>No Image Selected</span>'; // Clear image preview
+}
+
 // Functions to open and close the form
 function openForm() {
     document.getElementById('formContainer').style.display = 'block';
@@ -87,6 +99,7 @@ function openForm() {
 }
 
 function closeForm() {
+    resetForm(); // Reset the form when closing
     document.getElementById('formContainer').style.display = 'none';
     document.getElementById('overlay').style.display = 'none';
 }

@@ -56,7 +56,7 @@
 }
 
 .form-fields-addbook {
-    flex: .8;
+    flex: .85;
 }
 
 .form-group {
@@ -86,7 +86,7 @@
 
 .button-container {
     text-align: center;
-    margin-top: -70px;
+    margin-top: -90px;
 }
 
 .submit-btn {
@@ -116,4 +116,17 @@
     background-color: rgba(0, 0, 0, 0.5);
     z-index: 500;
     display: none;
+}
+
+.container {
+    /* Optional: to center the content */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.sized-box {
+    width: 100px; /* Set your desired width */
+    height: 20px; /* Set your desired height */
+    background-color: #dddddd00; /* Optional: background color for visibility */
 }
