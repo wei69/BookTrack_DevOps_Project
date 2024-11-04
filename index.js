@@ -13,8 +13,8 @@ const { addTransaction } = require("./utils/add-transaction.js");
 
 const { updateBook } = require('./utils/update-book-util.js'); // Import the utility functions for updating books
 
-const {addTransaction} = require("./utils/add-Transaction-Utils.js");
-const { updateBook } = require('./utils/update-book-util'); // Import the utility functions for updating books
+
+ // Import the utility functions for updating books
 
 const Book = require('./models/Books');                   // Import your Book model
 const { getBooks, searchBooks,fetchBookById } = require('./utils/get-book-utils'); // Import the getBooks function for fetching books
