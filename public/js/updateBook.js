@@ -22,7 +22,7 @@ function isValidISBN(isbn) {
         if (checksum === 'X') {
             sum += 10 * 10;
         } else if (checksum >= '0' && checksum <= '9') {
-            sum += 10 * parseInt(checksum, 10);
+            sum += 10 * parseInt(checksum, 10); //calculates the weighted sum for each digit by multiplying the digit's position
         } else {
             return false;
         }
