@@ -6,13 +6,11 @@ const multer = require('multer');                         // Import multer for h
 const mongoose = require('mongoose');                     // Import mongoose for MongoDB interaction
 const cors = require('cors');                             // Import cors to enable Cross-Origin Resource Sharing
 
-const { addBook} = require('./utils/add-book-util.js');     // Import the addBook function for handling book addition
-const {addTransaction} = require("./utils/addTransactionUtils.js");
-=======
-const { addBook} = require('./utils/addBookUtils.js');     // Import the addBook function for handling book addition
-const {addTransaction} = require("./utils/add-Transaction-Utils.js");
 
-const { updateBook } = require('./utils/updateBookUtil'); // Import the utility functions for updating books
+const { addBook} = require('./utils/add-book-Util.js');     // Import the addBook function for handling book addition
+const {addTransaction} = require("./utils/add-transaction-utils.js");
+
+const { updateBook } = require('./utils/update-book-util.js'); // Import the utility functions for updating books
 const Book = require('./models/Books');                   // Import your Book model
 const { getBooks, searchBooks,fetchBookById } = require('./utils/get-book-utils'); // Import the getBooks function for fetching books
 
