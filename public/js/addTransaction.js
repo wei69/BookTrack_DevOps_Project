@@ -6,7 +6,7 @@ function displayMessage(message, type) {
     messageElement.style.display = "block"; // Make sure the message element is visible
 
     if (type === "success") {
-        messageElement.style.color = "green"; // Success message color
+        messageElement.style.color = "pink"; // Success message color
     } else if (type === "error") {
         messageElement.style.color = "red"; // Error message color
     } 
