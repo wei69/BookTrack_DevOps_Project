@@ -5,8 +5,13 @@ const bodyParser = require('body-parser');                // Import body-parser 
 const multer = require('multer');                         // Import multer for handling file uploads
 const mongoose = require('mongoose');                     // Import mongoose for MongoDB interaction
 const cors = require('cors');                             // Import cors to enable Cross-Origin Resource Sharing
+
 const { addBook} = require('./utils/add-book-util.js');     // Import the addBook function for handling book addition
 const {addTransaction} = require("./utils/addTransactionUtils.js");
+=======
+const { addBook} = require('./utils/addBookUtils.js');     // Import the addBook function for handling book addition
+const {addTransaction} = require("./utils/add-Transaction-Utils.js");
+
 const { updateBook } = require('./utils/updateBookUtil'); // Import the utility functions for updating books
 const Book = require('./models/Books');                   // Import your Book model
 const { getBooks, searchBooks,fetchBookById } = require('./utils/getBookUtils'); // Import the getBooks function for fetching books
@@ -25,9 +30,6 @@ app.use(bodyParser.json());
 
 // Serve static files from the 'public' directory (e.g., HTML, CSS, JS)
 app.use(express.static('./public'));
-
-
-
 
 // Connect to MongoDB using the MONGODB_URI environment variable from .env file
 mongoose.connect(
