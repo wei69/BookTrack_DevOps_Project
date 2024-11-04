@@ -17,9 +17,9 @@ function addBookFeature() {
             return;
         }
 
-        // Validate ISBN to ensure it is a 13-digit number
-        if (!/^\d{13}$/.test(isbn)) {
-            alert("ISBN must be a 13-digit number.");
+        // Validate ISBN to ensure it is a 13-digit number and starts with 978 or 979
+        if (!/^(978|979)\d{10}$/.test(isbn)) {
+            alert("Please enter a valid ISBN number.");
             return;
         }
 
@@ -56,7 +56,7 @@ function addBookFeature() {
                 } else if (errorData.error === 'isbn_exists') {
                     alert("The ISBN already exists. Please use a unique ISBN.");
                 } else if (errorData.error === 'isbn_invalid') {
-                    alert("ISBN must be a 13-digit number.");
+                    alert("Please enter a valid ISBN number.");
                 } else {
                     alert('Failed to add book.');
                 }
