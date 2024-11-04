@@ -87,7 +87,6 @@ function displayBooks(books) {
             console.warn('Incomplete book data:', book);
         }
     }
-
     // Update the innerHTML of the bookContainer
     bookContainer.innerHTML = html;
 }
