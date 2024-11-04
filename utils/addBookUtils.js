@@ -1,5 +1,6 @@
 // Import the Book model to interact with the database
 const Book = require('../models/Books.js');
+
 // Define an asynchronous function to handle adding a new book
 async function addBook(req, res) {
     try {
@@ -19,13 +20,13 @@ async function addBook(req, res) {
             return res.status(400).json({ error: 'title_exists' });
         }
 
-        // Check for existing ISBN
+        // Check for existing ISBN to prevent duplicate entries
         const existingISBN = await Book.findOne({ isbn });
         if (existingISBN) {
             return res.status(400).json({ error: 'isbn_exists' });
         }
 
-        // Ensure ISBN is numeric and 13 digits
+        // Ensure ISBN is numeric and has exactly 13 digits
         if (!/^\d{13}$/.test(isbn)) {
             return res.status(400).json({ error: 'isbn_invalid' });
         }
@@ -37,17 +38,17 @@ async function addBook(req, res) {
             isbn,
             genre,
             availableCopies,
-            image: imageBase64,
+            image: imageBase64, // Store image as Base64 encoded string
         });
 
-        await newBook.save(); // Save the new book instance to the database
-        res.status(201).json({ message: 'Book added successfully!' });
+        // Save the new book instance to the database
+        await newBook.save();
+        res.status(201).json({ message: 'Book added successfully!' }); // Send success response
     } catch (error) {
-        console.error('Error adding book:', error);
-        res.status(500).json({ error: 'An error occurred while adding the book.' });
+        console.error('Error adding book:', error); // Log any errors encountered
+        res.status(500).json({ error: 'An error occurred while adding the book.' }); // Send error response
     }
 }
 
-
-
-module.exports = { addBook  }; // Export the addBook function to make it available in other parts of the application
+// Export the addBook function to make it available in other parts of the application
+module.exports = { addBook };
