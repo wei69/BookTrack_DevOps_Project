@@ -12,7 +12,7 @@ async function addTransaction(req, res) {
 
     // Validate borrower name
     if (!borrower_name) {
-        return res.status(400).json({ error: "Borrower name is required" });
+        return res.status(400).json({ error: "Borrower name is required " });
     }
 
     // Validate dates
