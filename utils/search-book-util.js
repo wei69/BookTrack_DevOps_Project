@@ -1,5 +1,5 @@
 // Import the Book model to interact with the database
-const Book = require('../models/Books.js');
+const Book = require('../models/book.js');
 const mongoose = require('mongoose'); // Import mongoose to validate object IDs
 async function searchBooks(req, res) {
     const query = req.query.query?.toLowerCase(); // Use optional chaining to safely access query
