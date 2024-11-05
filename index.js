@@ -9,15 +9,12 @@ const { addBook} = require('./utils/add-book-util.js');     // Import the addBoo
 
 const { addTransaction } = require("./utils/add-transaction-util.js");
 
-
-
-const { updateBook } = require('./utils/update-book-util.js'); // Import the utility functions for updating books
-
+const { updateBook,fetchBookById } = require('./utils/update-book-util.js'); // Import the utility functions for updating books
 
  // Import the utility functions for updating books
 
 const Book = require('./models/Books');                   // Import your Book model
-const { getBooks, searchBooks,fetchBookById } = require('./utils/get-book-utils'); // Import the getBooks function for fetching books
+const { getBooks, searchBooks } = require('./utils/get-book-utils'); // Import the getBooks function for fetching books
 
 // Initialize an Express application
 const app = express();
