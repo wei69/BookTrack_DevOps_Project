@@ -8,8 +8,8 @@ const cors = require('cors');                             // Import cors to enab
 const { addBook , addTransaction} = require('./utils/Add-BookUtils');     // Import the addBook function for handling book addition
 const { updateBook } = require('./utils/updateBookUtil'); // Import the utility functions for updating books
 const Book = require('./models/Books');                   // Import your Book model
-const { getBooks, searchBooks,fetchBookById } = require('./utils/get-book-utils'); // Import the getBooks function for fetching books
-
+const { getBooks, fetchBookById } = require('./utils/get-book-utils'); // Import the getBooks function for fetching books
+const { searchBooks } = require('./utils/search-book-util'); // Import the searchBooks function for searching books
 // Initialize an Express application
 const app = express();
 const PORT = process.env.PORT || 5500; // Set the server port from environment variables or default to 5500
