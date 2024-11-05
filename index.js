@@ -5,11 +5,22 @@ const bodyParser = require('body-parser');                // Import body-parser 
 const multer = require('multer');                         // Import multer for handling file uploads
 const mongoose = require('mongoose');                     // Import mongoose for MongoDB interaction
 const cors = require('cors');                             // Import cors to enable Cross-Origin Resource Sharing
-const { addBook , addTransaction} = require('./utils/Add-BookUtils');     // Import the addBook function for handling book addition
-const { updateBook } = require('./utils/updateBookUtil'); // Import the utility functions for updating books
-const Book = require('./models/Books');                   // Import your Book model
 const { getBooks, fetchBookById } = require('./utils/get-book-utils'); // Import the getBooks function for fetching books
 const { searchBooks } = require('./utils/search-book-util'); // Import the searchBooks function for searching books
+
+const { addBook} = require('./utils/add-book-util.js');     // Import the addBook function for handling book addition
+
+const { addTransaction } = require("./utils/add-transaction-util.js");
+
+
+
+const { updateBook } = require('./utils/update-book-util.js'); // Import the utility functions for updating books
+
+
+ // Import the utility functions for updating books
+
+const Book = require('./models/book.js');                   // Import your Book model
+
 // Initialize an Express application
 const app = express();
 const PORT = process.env.PORT || 5500; // Set the server port from environment variables or default to 5500
@@ -24,9 +35,6 @@ app.use(bodyParser.json());
 
 // Serve static files from the 'public' directory (e.g., HTML, CSS, JS)
 app.use(express.static('./public'));
-
-
-
 
 // Connect to MongoDB using the MONGODB_URI environment variable from .env file
 mongoose.connect(
