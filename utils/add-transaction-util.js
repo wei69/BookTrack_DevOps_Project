@@ -1,6 +1,6 @@
 
-const Book = require('../models/Books.js');
-const BorrowTransaction = require('../models/borrowtransaction.js')
+const Book = require('../models/book.js');
+const BorrowTransaction = require('../models/borrow-transaction.js')
 async function addTransaction(req, res) {
     const { book_id, borrower_name, borrowDate, returnDate } = req.body;
 

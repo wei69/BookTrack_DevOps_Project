@@ -1,5 +1,5 @@
 // Import the Book model to interact with the database
-const Book = require('../models/Books.js');
+const Book = require('../models/book.js');
 
 // Define an asynchronous function to handle adding a new book
 async function addBook(req, res) {
