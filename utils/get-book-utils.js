@@ -1,5 +1,5 @@
 // Import the Book model to interact with the database
-const Book = require('../models/Books.js');
+const Book = require('../models/book.js');
 const mongoose = require('mongoose'); // Import mongoose to validate object IDs
 
 // Define an asynchronous function to handle getting books

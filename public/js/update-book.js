@@ -22,7 +22,7 @@ function isValidISBN(isbn) {
         if (checksum === 'X') {
             sum += 10 * 10;
         } else if (checksum >= '0' && checksum <= '9') {
-            sum += 10 * parseInt(checksum, 10);
+            sum += 10 * parseInt(checksum, 10); //calculates the weighted sum for each digit by multiplying the digit's position
         } else {
             return false;
         }
@@ -101,6 +101,11 @@ document.getElementById('editImage').addEventListener('change', function (event)
 // Function to handle update form submission
 document.getElementById('editBookForm').addEventListener('submit', async function (event) {
     event.preventDefault(); // Prevent default form submission
+
+    const isConfirmed = confirm("Are you sure you want to update the book details?");
+    if (!isConfirmed) {
+        return; // Exit function if user does not confirm
+    }
 
     const isbn = document.getElementById('editIsbn').value;
     if (!isValidISBN(isbn)) {
