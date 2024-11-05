@@ -5,6 +5,9 @@ const bodyParser = require('body-parser');                // Import body-parser 
 const multer = require('multer');                         // Import multer for handling file uploads
 const mongoose = require('mongoose');                     // Import mongoose for MongoDB interaction
 const cors = require('cors');                             // Import cors to enable Cross-Origin Resource Sharing
+const { getBooks, fetchBookById } = require('./utils/get-book-utils'); // Import the getBooks function for fetching books
+const { searchBooks } = require('./utils/search-book-util'); // Import the searchBooks function for searching books
+
 const { addBook} = require('./utils/add-book-util.js');     // Import the addBook function for handling book addition
 
 const { addTransaction } = require("./utils/add-transaction-util.js");
@@ -17,7 +20,6 @@ const { updateBook } = require('./utils/update-book-util.js'); // Import the uti
  // Import the utility functions for updating books
 
 const Book = require('./models/book.js');                   // Import your Book model
-const { getBooks, searchBooks,fetchBookById } = require('./utils/get-book-utils'); // Import the getBooks function for fetching books
 
 // Initialize an Express application
 const app = express();
