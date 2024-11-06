@@ -5,6 +5,14 @@ function closeForm() {
     document.getElementById('editFormContainer').style.display = 'none';
 }
 
+// Function to check if a title already exists, ignoring the current book
+async function isTitleUnique(newTitle, bookId) {
+    const response = await fetch(`http://localhost:5500/books`);
+    const books = await response.json();
+
+    return books.every(book => book.title !== newTitle || book._id === bookId);
+}
+
 // Function to validate ISBN
 function isValidISBN(isbn) {
     // Remove any hyphens
@@ -102,9 +110,20 @@ document.getElementById('editImage').addEventListener('change', function (event)
 document.getElementById('editBookForm').addEventListener('submit', async function (event) {
     event.preventDefault(); // Prevent default form submission
 
+    const form = new FormData(this);
+    const bookId = document.getElementById('editBookId').value;
+    const title = document.getElementById('editTitle').value.trim(); 
+
     const isbn = document.getElementById('editIsbn').value;
     if (!isValidISBN(isbn)) {
         alert('Invalid ISBN. Please enter a valid ISBN-10 or ISBN-13.');
+        return;
+    }
+
+    // Check if title is unique (ignoring the current book's own title)
+    const isUniqueTitle = await isTitleUnique(title, bookId);
+    if (!isUniqueTitle) {
+        alert('Title already exists. Please choose a different title.');
         return;
     }
 
@@ -112,9 +131,6 @@ document.getElementById('editBookForm').addEventListener('submit', async functio
     if (!isConfirmed) {
         return; // Exit function if user does not confirm
     }
-
-    const form = new FormData(this);
-    const bookId = document.getElementById('editBookId').value;
 
     try {
         const response = await fetch(`http://localhost:5500/updateBook/${bookId}`, {
@@ -154,17 +170,17 @@ function getBookById(bookId) {
             // Parse the JSON response to get the book object
             const book = JSON.parse(request.responseText);
             displayBookDetails(book); // Call displayBookDetails to render the book details
-        } 
+        }
         // If the status is 400, alert about invalid book ID format
         else if (request.status === 400) {
             alert('Invalid book ID format. Please check the ID and try again.');
             console.error('Invalid book ID format:', request.statusText);
-        } 
+        }
         // If the status is 404, alert that the book was not found
         else if (request.status === 404) {
             alert('Book not found. It may have been removed.');
             console.error('Book not found:', request.statusText);
-        } 
+        }
         // Handle other unsuccessful status codes by alerting the user
         else {
             alert('Failed to retrieve book details. Please try again later.');

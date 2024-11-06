@@ -12,6 +12,20 @@ async function updateBook(req, res) {
         // Destructure the updated book details from the request body
         const { title, author, isbn, genre, availableCopies } = req.body;
 
+        // Retrieve the existing book to check if the title has changed
+        const existingBook = await Book.findById(id);
+        if (!existingBook) {
+            return res.status(404).json({ error: 'Book not found' });
+        }
+
+        // Only check for title uniqueness if the title has changed
+        if (existingBook.title !== title) {
+            const duplicateBook = await Book.findOne({ title });
+            if (duplicateBook) {
+                return res.status(400).json({ error: 'Title already exists.' });
+            }
+        }
+
         // Handle image update if a new image is provided
         let imageBase64;
         if (req.file) {
