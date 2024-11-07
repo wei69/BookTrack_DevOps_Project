@@ -8,10 +8,10 @@ function searchBooks() {
         return; // Exit function if the search term is empty
     }
 
-    // Limit query length to 100 characters
-    if (query.length > 100) {
-        alert('Search term is too long. Please limit to 100 characters.');
-        return; // Exit function if the query exceeds 100 characters
+    // Limit query length to 50 characters
+    if (query.length > 50) {
+        alert('Search term is too long. Please limit to 50 characters.');
+        return; // Exit function if the query exceeds 50 characters
     }
     
     // Sanitize input: Allow letters, numbers, spaces, and common punctuation marks
