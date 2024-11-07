@@ -9,6 +9,7 @@ async function searchBooks(req, res) {
     if (!query || typeof query !== 'string' || query.trim() === '') {
         return res.status(400).json({ error: 'Invalid parameter: "query" is required and must be a non-empty string.' });
     }
+    // Limit query length to 50 characters
     if (query.length > 50) {
         return res.status(400).json({ error: 'Query is too long. Max length is 50 characters.' });
     }
