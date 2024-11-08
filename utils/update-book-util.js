@@ -12,6 +12,15 @@ async function updateBook(req, res) {
         // Destructure the updated book details from the request body
         const { title, author, isbn, genre, availableCopies } = req.body;
 
+        // Validate title and author length
+        if (title.length > 100) {
+            return res.status(400).json({ error: 'Title must be 100 characters or fewer.' });
+        }
+
+        if (author.length > 150) {
+            return res.status(400).json({ error: 'Author name must be 150 characters or fewer.' });
+        }
+
         // Retrieve the existing book to check if the title has changed
         const existingBook = await Book.findById(id);
         if (!existingBook) {
