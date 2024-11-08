@@ -110,8 +110,11 @@ function addBookFeature() {
 
 // Helper function to reset the form and clear the image preview
 function resetForm() {
+    document.getElementById('formContainer').style.display = 'none';
+    document.getElementById('overlay').style.display = 'none';
     document.getElementById('bookForm').reset(); // Clear all form fields
     const imagePreview = document.getElementById('imagePreview');
+    document.getElementById('image').value = '';  
     imagePreview.innerHTML = '<span>No Image Selected</span>'; // Clear image preview
 }
 
@@ -121,12 +124,12 @@ function openForm() {
     document.getElementById('overlay').style.display = 'block';
 }
 
-// Function to close the form, reset it, and hide the form and overlay
-function closeForm() {
-    resetForm(); // Reset the form when closing
-    document.getElementById('formContainer').style.display = 'none';
-    document.getElementById('overlay').style.display = 'none';
-}
+// // Function to close the form, reset it, and hide the form and overlay
+// function closeForm() {
+//     resetForm(); // Reset the form when closing
+//     document.getElementById('formContainer').style.display = 'none';
+//     document.getElementById('overlay').style.display = 'none';
+// }
 
 // Initialize the addBookFeature function to set up event listeners
 addBookFeature();
