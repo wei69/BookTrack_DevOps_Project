@@ -113,8 +113,20 @@ document.getElementById('editBookForm').addEventListener('submit', async functio
     const form = new FormData(this);
     const bookId = document.getElementById('editBookId').value;
     const title = document.getElementById('editTitle').value.trim(); 
-
+    const author = document.getElementById('editAuthor').value.trim();
     const isbn = document.getElementById('editIsbn').value;
+
+    // Title and Author length validation
+    if (title.length > 100) {
+        alert('Title must be 100 characters or fewer.');
+        return;
+    }
+
+    if (author.length > 150) {
+        alert('Author name must be 150 characters or fewer.');
+        return;
+    }
+
     if (!isValidISBN(isbn)) {
         alert('Invalid ISBN. Please enter a valid ISBN-10 or ISBN-13.');
         return;
