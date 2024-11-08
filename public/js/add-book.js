@@ -17,6 +17,17 @@ function addBookFeature() {
             return;
         }
 
+        // Character limit validation for title and author
+        if (title.length > 100) {
+            alert("Title should not exceed 100 characters.");
+            return;
+        }
+
+        if (author.length > 150) {
+            alert("Author's name should not exceed 150 characters.");
+            return;
+        }
+
         // Validate ISBN to ensure it is a 13-digit number and starts with 978 or 979
         if (!/^(978|979)\d{10}$/.test(isbn)) {
             alert("Please enter a valid ISBN number.");
@@ -73,12 +84,21 @@ function addBookFeature() {
         }
     });
 
-    // Image preview functionality when a file is selected
+    // Image preview functionality and size validation when a file is selected
     document.getElementById('image').addEventListener('change', function () {
         const imagePreview = document.getElementById('imagePreview');
         imagePreview.innerHTML = ''; // Clear previous image preview
         const file = this.files[0];
+
+        // Check if the file exists and validate its size
         if (file) {
+            if (file.size > 16 * 1024 * 1024) { // 16 MB in bytes
+                alert("The image file size should not exceed 16 MB.");
+                this.value = ''; // Clear the file input
+                imagePreview.innerHTML = '<span>No Image Selected</span>'; // Reset image preview
+                return;
+            }
+            
             const img = document.createElement('img');
             img.src = URL.createObjectURL(file); // Display selected image
             imagePreview.appendChild(img);
