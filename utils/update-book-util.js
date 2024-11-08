@@ -38,6 +38,10 @@ async function updateBook(req, res) {
         // Handle image update if a new image is provided
         let imageBase64;
         if (req.file) {
+            // Check if file size exceeds 16MB
+            if (req.file.size > 16 * 1024 * 1024) {
+                return res.status(400).json({ error: 'Image size should not exceed 16MB.' });
+            }
             imageBase64 = req.file.buffer.toString('base64');
         }
 
