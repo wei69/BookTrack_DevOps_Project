@@ -47,7 +47,6 @@ function isValidISBN(isbn) {
     return false;
 }
 
-
 // Function to open the update form with current book details
 async function editBook(bookId) {
     if (!bookId) {
@@ -95,7 +94,17 @@ async function editBook(bookId) {
 // Event listener to handle image preview when a new image is selected
 document.getElementById('editImage').addEventListener('change', function (event) {
     const file = event.target.files[0];
+    
+    // Check if an image file is selected
     if (file) {
+        // Check if file size exceeds 16MB (16 * 1024 * 1024 bytes)
+        if (file.size > 16 * 1024 * 1024) {
+            alert('Image size should not exceed 16MB. Please select a smaller file.');
+            event.target.value = ''; // Clear the file input
+            return;
+        }
+
+        // Proceed with displaying the image preview if the size is valid
         const reader = new FileReader();
         reader.onload = function (e) {
             const imageElement = document.getElementById('editBookPreviewImage');
