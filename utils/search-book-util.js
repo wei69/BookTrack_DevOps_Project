@@ -15,7 +15,7 @@ async function searchBooks(req, res) {
     }
 
     try {
-        // Search for books that match the title (consider expanding to other fields if needed)
+        // Search for books that match the title 
         const filteredBooks = await Book.find({
             title: { $regex: escapeRegex(query), $options: 'i' } // Case-insensitive search with escaped query
         });
