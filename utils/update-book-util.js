@@ -21,6 +21,10 @@ async function updateBook(req, res) {
             return res.status(400).json({ error: 'Author name must be 150 characters or fewer.' });
         }
 
+        if (availableCopies < 0) {
+            return res.status(400).json({ error: 'Available copies should be more that 0' });
+        }
+
         // Retrieve the existing book to check if the title has changed
         const existingBook = await Book.findById(id);
         if (!existingBook) {
