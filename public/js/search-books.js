@@ -4,7 +4,7 @@ function searchBooks() {
 
     // Handling empty search string
     if (!query) {
-        alert('Please enter a search term. Whitespace is not allowed');
+        alert('Empty or whitespace search term is not allowed');
         return; // Exit function if the search term is empty
     }
 
