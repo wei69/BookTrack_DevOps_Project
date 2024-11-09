@@ -12,6 +12,19 @@ async function updateBook(req, res) {
         // Destructure the updated book details from the request body
         const { title, author, isbn, genre, availableCopies } = req.body;
 
+        // Validate title and author length
+        if (title.length > 100) {
+            return res.status(400).json({ error: 'Title must be 100 characters or fewer.' });
+        }
+
+        if (author.length > 150) {
+            return res.status(400).json({ error: 'Author name must be 150 characters or fewer.' });
+        }
+
+        if (availableCopies < 0) {
+            return res.status(400).json({ error: 'Available copies should be more that 0' });
+        }
+
         // Retrieve the existing book to check if the title has changed
         const existingBook = await Book.findById(id);
         if (!existingBook) {
@@ -29,6 +42,10 @@ async function updateBook(req, res) {
         // Handle image update if a new image is provided
         let imageBase64;
         if (req.file) {
+            // Check if file size exceeds 16MB
+            if (req.file.size > 16 * 1024 * 1024) {
+                return res.status(400).json({ error: 'Image size should not exceed 16MB.' });
+            }
             imageBase64 = req.file.buffer.toString('base64');
         }
 
