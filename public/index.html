@@ -20,8 +20,7 @@
         </div>
     </div>
     <!-- Overlay to display a semi-transparent background when the form is open, closing form on click -->
-    <div class="overlay" id="overlay" onclick="closeForm()"></div>
-
+    <div class="overlay" id="overlay" onclick="resetForm()"></div>
     <!-- START FOR ADD-BOOK FUNCTION -->
 
     <!-- Container for the 'Add Book' form -->
@@ -156,6 +155,7 @@
 </body>
 
 <body>  
+    <div class="edit-overlay" id="edit-overlay" onclick="closeForm()"></div>
     <!-- Container for the edit book form, initially hidden -->
     <div class="form-container" id="editFormContainer" style="display: none;">
         <h2 style="text-align: center;">Edit Book Details</h2>

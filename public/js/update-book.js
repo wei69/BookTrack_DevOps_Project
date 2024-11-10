@@ -1,7 +1,6 @@
 // General function to close whichever form is open
 function closeForm() {
-    document.getElementById('overlay').style.display = 'none';
-    document.getElementById('formContainer').style.display = 'none';
+    document.getElementById('edit-overlay').style.display = 'none';
     document.getElementById('editFormContainer').style.display = 'none';
 }
 
@@ -81,7 +80,7 @@ async function editBook(bookId) {
 
             // Display the form
             document.getElementById('editFormContainer').style.display = 'block';
-            document.getElementById('overlay').style.display = 'block';
+            document.getElementById('edit-overlay').style.display = 'block';
         } else {
             alert('Failed to fetch book details for editing.');
         }
