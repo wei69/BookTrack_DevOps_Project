@@ -1,18 +1,30 @@
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 const mongoose = require('mongoose');
-const { app } = require('../index'); // Replace with your app's entry point
+const { app, server } = require('../index'); // Replace with your app's entry point
 const Book = require('../models/book');
 const BorrowTransaction = require('../models/borrow-transaction');
+const { MongoMemoryServer } = require('mongodb-memory-server');
 const { expect } = chai;
 
 chai.use(chaiHttp);
 
 describe('POST /addTransaction - Add Transaction', () => {
     let validBookId;
- 
-    before(async function ()  {
-        this.timeout(10000);
+    let mongoServer;
+
+    before(async function () {
+        this.timeout(10000); // Increased timeout for MongoDB setup
+
+        // Start an in-memory MongoDB instance
+        mongoServer = await MongoMemoryServer.create();
+        const mongoUri = mongoServer.getUri();
+
+        // Connect to in-memory MongoDB
+        if (mongoose.connection.readyState === 0) {
+            await mongoose.connect(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true });
+        }
+
         // Ensure a valid book exists in the database
         const book = await Book.findOne();
         if (book) {
@@ -21,8 +33,25 @@ describe('POST /addTransaction - Add Transaction', () => {
             throw new Error('No book found in the database. Ensure there is at least one book for testing.');
         }
 
-        // Clean up any active transactions
+        // Clean up any active transactions for the book
         await BorrowTransaction.deleteMany({ book_id: validBookId });
+    });
+
+    after(async () => {
+        // Stop in-memory MongoDB server
+        await mongoServer.stop();
+
+        // Close the server and disconnect mongoose
+        await new Promise((resolve, reject) => {
+            server.close((err) => {
+                if (err) reject(err);
+                console.log('Server closed');
+                resolve();
+            });
+        });
+
+        // Disconnect mongoose
+        await mongoose.disconnect();
     });
 
     it('should successfully add a transaction with valid data', async () => {
@@ -34,6 +63,8 @@ describe('POST /addTransaction - Add Transaction', () => {
         };
 
         const res = await chai.request(app).post('/addTransaction').send(transactionData);
+        
+        console.log('Response:', res.body); // Log response body for debugging
 
         expect(res).to.have.status(200);
         expect(res.body).to.have.property('message', 'Transaction added successfully!');
@@ -120,5 +151,5 @@ describe('POST /addTransaction - Add Transaction', () => {
 
         // Clean up after test
         await BorrowTransaction.deleteMany({ book_id: validBookId });
-    });
+    });  
 });
