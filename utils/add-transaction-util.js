@@ -1,40 +1,48 @@
 const Book = require('../models/book.js');
 const BorrowTransaction = require('../models/borrow-transaction.js');
+const mongoose = require('mongoose');
 
 async function addTransaction(req, res) {
     const { book_id, borrower_name, borrowDate, returnDate } = req.body;
 
+    // Validate all required fields
+    if (!book_id || !borrower_name || !borrowDate || !returnDate) {
+        const errorMessage = !borrower_name ? 'Borrower name is required' : 'All fields are required!';
+        return res.status(400).json({ error: errorMessage });
+    }
+
     try {
-        // Validate book ID
-        const book = await Book.findById(book_id);
-        if (!book) {
-            return res.status(400).json({ error: "Invalid book ID" });
+        // Validate book ID format
+        if (!mongoose.Types.ObjectId.isValid(book_id)) {
+            return res.status(400).json({ error: 'Invalid book ID' });
         }
 
-        // Validate borrower name
-        if (!borrower_name) {
-            return res.status(400).json({ error: "Borrower name is required" });
+        // Validate book existence
+        const book = await Book.findById(book_id);
+        if (!book) {
+            return res.status(400).json({ error: 'Invalid book ID' });
         }
 
         // Validate dates
         const borrowDateObj = new Date(borrowDate);
         const returnDateObj = new Date(returnDate);
 
-        if (isNaN(borrowDateObj.getTime()) || isNaN(returnDateObj.getTime())) {
-            return res.status(400).json({ error: "Invalid date format for borrowDate or returnDate" });
+        if (isNaN(borrowDateObj) || isNaN(returnDateObj)) {
+            return res.status(400).json({ error: 'Invalid date format for borrowDate or returnDate' });
         }
 
-        // Check if the book is currently borrowed (e.g., an active transaction exists)
+        // Check if the book is already borrowed (active transaction)
+        const now = new Date();
         const activeTransaction = await BorrowTransaction.findOne({
             book_id: book._id,
-            returnDate: { $gte: new Date() } // Book is considered "borrowed" if returnDate is in the future
+            returnDate: { $gte: now },
         });
 
         if (activeTransaction) {
-            return res.status(400).json({ error: "This book is already borrowed by another user" });
+            return res.status(400).json({ error: 'This book is already borrowed by another user' });
         }
 
-        // Create new transaction if the book is available
+        // Create and save the new transaction
         const newTransaction = new BorrowTransaction({
             book_id: book._id,
             borrower: { name: borrower_name },
@@ -43,9 +51,10 @@ async function addTransaction(req, res) {
         });
 
         await newTransaction.save();
-        res.json({ message: "Transaction added successfully!" });
+        res.status(200).json({ message: 'Transaction added successfully!' });
     } catch (error) {
-        res.status(500).json({ error: "Error saving transaction: " + error.message });
+        console.error('Error during transaction creation:', error);
+        res.status(500).json({ error: 'Error saving transaction: ' + error.message });
     }
 }
 
