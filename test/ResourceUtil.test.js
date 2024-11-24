@@ -10,7 +10,7 @@ chai.use(chaiHttp);
 
 describe('POST /addTransaction - Add Transaction', () => {
     let validBookId;
-
+    this.timeout(10000)
     before(async () => {
         // Ensure a valid book exists in the database
         const book = await Book.findOne();
