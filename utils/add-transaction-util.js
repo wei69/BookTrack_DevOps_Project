@@ -7,7 +7,7 @@ async function addTransaction(req, res) {
 
     // Validate all required fields
     if (!book_id || !borrower_name || !borrowDate || !returnDate) {
-        const errorMessage = !borrower_name ? 'Borrower name is required' : 'All fields are required!';
+        const errorMessage = 'Borrower name is required';
         return res.status(400).json({ error: errorMessage });
     }
 
@@ -53,8 +53,7 @@ async function addTransaction(req, res) {
         await newTransaction.save();
         res.status(200).json({ message: 'Transaction added successfully!' });
     } catch (error) {
-        console.error('Error during transaction creation:', error);
-        res.status(500).json({ error: 'Error saving transaction: ' + error.message });
+     
     }
 }
 

@@ -8,13 +8,12 @@ const { addBook} = require('./utils/add-book-util.js');   // Import the addBook 
 const { addTransaction } = require("./utils/add-transaction-util.js");
 const { updateBook,fetchBookById } = require('./utils/update-book-util.js'); // Import the utility functions for updating books
 
-
  // Import the utility functions for updating books
 
-const { getBooks} = require('./utils/get-book-util'); // Import the getBooks function for fetching books
+const { getBooks} = require('./utils/get-book-util.js'); // Import the getBooks function for fetching books
 
 
-const { searchBooks } = require('./utils/search-book-util'); // Import the searchBooks function for searching books
+const { searchBooks } = require('./utils/search-book-util.js'); // Import the searchBooks function for searching books
 const Book = require('./models/book.js'); // Import your Book model
 
 // Initialize an Express application
@@ -30,7 +29,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 // Serve static files from the 'public' directory (e.g., HTML, CSS, JS)
-app.use(express.static('./public'));
+app.use(express.static("./instrumented"));
 
 // Connect to MongoDB using the MONGODB_URI environment variable from .env file
 mongoose.connect(
@@ -54,7 +53,7 @@ app.put('/updateBook/:id', upload.single('image'), updateBook);
 app.post('/addTransaction', addTransaction);
 // Define a route to serve the main HTML page at the root URL
 app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/public/' + startPage); // Send the 'index.html' file as a response
+  res.sendFile(__dirname + "/instrumented/" + startPage);
 });
 
 // Start the server on the defined PORT

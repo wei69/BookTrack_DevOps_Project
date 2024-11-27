@@ -12,9 +12,7 @@ function displayMessage(message, type) {
     } 
 
     // Hide the message after a few seconds
-    setTimeout(() => {
-        messageElement.style.display = "none";
-    }, 3000);
+   
 }
 
 function addTransaction() {
@@ -29,25 +27,52 @@ function addTransaction() {
         return;
     }
 
+    // Check for empty or whitespace-only borrower name
+    if (!borrower_name.trim()) {
+        displayMessage("Borrower's name cannot be empty or only spaces.", "error");
+        return;
+    }
+
+    // Check for borrower name length
+    
+
+    const invalidNamePattern = /[^a-zA-Z\s]/;
+    if (invalidNamePattern.test(borrower_name)) {
+        displayMessage("Borrower's name contains invalid characters. Only letters and spaces are allowed.", "error");
+        return;
+    }
+
     const isValidObjectId = /^[0-9a-fA-F]{24}$/.test(book_id);
     if (!isValidObjectId) {
         displayMessage("Invalid book_id format. It must be a 24-character hex string.", "error");
         return;
     }
 
+    // Check for invalid characters in book ID
+    
+
     const borrowDateObj = new Date(borrowDate);
     const returnDateObj = new Date(returnDate);
 
-    if (isNaN(borrowDateObj.getTime()) || isNaN(returnDateObj.getTime())) {
-        displayMessage("Invalid date format for borrow or return date.", "error");
+    // Check for valid date format
+  
+
+    // Check if the dates are in the future
+    const currentDate = new Date();
+    if (borrowDateObj > currentDate || returnDateObj > currentDate) {
+        displayMessage("Borrow and return dates cannot be in the future.", "error");
         return;
     }
-    
+
+    // Check if return date is before borrow date
     if (returnDateObj <= borrowDateObj) {
         displayMessage("Return date must be after borrow date.", "error");
         return;
     }
-    
+
+
+ 
+
     const transactionData = { book_id, borrower_name, borrowDate, returnDate };
 
     // Send transaction data to server
@@ -67,11 +92,9 @@ function addTransaction() {
             displayMessage(data.error, "error");
         }
     })
-    .catch(error => {
-        console.error("Error:", error);
-        displayMessage("An error occurred while submitting the transaction.", "error");
-    });
+   
 }
+
 
 // Function to open the modal
 function openModal() {
