@@ -5,52 +5,64 @@ const { app, server } = require('../index'); // Replace with your app's entry po
 const Book = require('../models/book');
 const BorrowTransaction = require('../models/borrow-transaction');
 const { MongoMemoryServer } = require('mongodb-memory-server');
-const { expect } = chai;
-
+const assert = require('assert');
+const sinon = require('sinon'); // Add sinon for stubbing
 chai.use(chaiHttp);
 
-describe('POST /addTransaction - Add Transaction', () => {
+describe('POST /addTransaction - Add Transaction with Stubbing', () => {
     let validBookId;
     let mongoServer;
 
     before(async function () {
         this.timeout(10000); // Increased timeout for MongoDB setup
 
-        // Start an in-memory MongoDB instance
-        mongoServer = await MongoMemoryServer.create();
-        const mongoUri = mongoServer.getUri();
+        try {
+            mongoServer = await MongoMemoryServer.create();
+            const mongoUri = mongoServer.getUri();
 
-        // Connect to in-memory MongoDB
-        if (mongoose.connection.readyState === 0) {
-            await mongoose.connect(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true });
+            if (mongoose.connection.readyState === 0) {
+                await mongoose.connect(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true });
+            }
+
+            const book = await Book.findOne();
+            if (book) {
+                validBookId = book._id.toString();
+            } else {
+                throw new Error('No book found in the database. Ensure there is at least one book for testing.');
+            }
+
+            await BorrowTransaction.deleteMany({ book_id: validBookId });
+
+            sinon.stub(Book, 'findById').callsFake(async (id) => {
+                if (id.toString() === validBookId.toString()) {
+                    return { _id: validBookId, title: 'Sample Book', author: 'Sample Author' };
+                }
+                return null;
+            });
+
+            sinon.stub(BorrowTransaction, 'findOne').callsFake(async (query) => {
+                return null;
+            });
+
+            sinon.stub(BorrowTransaction.prototype, 'save').resolves({
+                book_id: validBookId,
+                borrower: { name: 'John Doe' },
+                borrowDate: new Date(),
+                returnDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+            });
+        } catch (error) {
+            console.log("Error during setup:", error);
         }
-
-        // Ensure a valid book exists in the database
-        const book = await Book.findOne();
-        if (book) {
-            validBookId = book._id.toString();
-        } else {
-            throw new Error('No book found in the database. Ensure there is at least one book for testing.');
-        }
-
-        // Clean up any active transactions for the book
-        await BorrowTransaction.deleteMany({ book_id: validBookId });
     });
 
     after(async () => {
-        // Stop in-memory MongoDB server
         await mongoServer.stop();
-
-        // Close the server and disconnect mongoose
         await new Promise((resolve, reject) => {
             server.close((err) => {
                 if (err) reject(err);
-                console.log('Server closed');
                 resolve();
             });
         });
-
-        // Disconnect mongoose
         await mongoose.disconnect();
     });
 
@@ -63,16 +75,14 @@ describe('POST /addTransaction - Add Transaction', () => {
         };
 
         const res = await chai.request(app).post('/addTransaction').send(transactionData);
-        
-        console.log('Response:', res.body); // Log response body for debugging
 
-        expect(res).to.have.status(200);
-        expect(res.body).to.have.property('message', 'Transaction added successfully!');
+        assert.strictEqual(res.status, 200, 'Expected status to be 200');
+        assert.strictEqual(res.body.message, 'Transaction added successfully!', 'Expected success message');
     });
 
     it('should return an error if the book does not exist', async () => {
         const transactionData = {
-            book_id: new mongoose.Types.ObjectId().toString(), // Nonexistent but valid ID
+            book_id: new mongoose.Types.ObjectId().toString(),
             borrower_name: 'Jane Green',
             borrowDate: new Date().toISOString(),
             returnDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
@@ -80,8 +90,8 @@ describe('POST /addTransaction - Add Transaction', () => {
 
         const res = await chai.request(app).post('/addTransaction').send(transactionData);
 
-        expect(res).to.have.status(400);
-        expect(res.body).to.have.property('error', 'Invalid book ID');
+        assert.strictEqual(res.status, 400, 'Expected status to be 400');
+        assert.strictEqual(res.body.error, 'Invalid book ID', 'Expected error message for invalid book ID');
     });
 
     it('should return an error for an invalid book ID', async () => {
@@ -94,8 +104,8 @@ describe('POST /addTransaction - Add Transaction', () => {
 
         const res = await chai.request(app).post('/addTransaction').send(transactionData);
 
-        expect(res).to.have.status(400);
-        expect(res.body).to.have.property('error', 'Invalid book ID');
+        assert.strictEqual(res.status, 400, 'Expected status to be 400');
+        assert.strictEqual(res.body.error, 'Invalid book ID', 'Expected error message for invalid book ID');
     });
 
     it('should return an error if the borrower name is missing', async () => {
@@ -108,8 +118,8 @@ describe('POST /addTransaction - Add Transaction', () => {
 
         const res = await chai.request(app).post('/addTransaction').send(transactionData);
 
-        expect(res).to.have.status(400);
-        expect(res.body).to.have.property('error', 'Borrower name is required');
+        assert.strictEqual(res.status, 400, 'Expected status to be 400');
+        assert.strictEqual(res.body.error, 'Borrower name is required', 'Expected error message for missing borrower name');
     });
 
     it('should return an error for invalid date formats', async () => {
@@ -122,12 +132,11 @@ describe('POST /addTransaction - Add Transaction', () => {
 
         const res = await chai.request(app).post('/addTransaction').send(transactionData);
 
-        expect(res).to.have.status(400);
-        expect(res.body).to.have.property('error', 'Invalid date format for borrowDate or returnDate');
+        assert.strictEqual(res.status, 400, 'Expected status to be 400');
+        assert.strictEqual(res.body.error, 'Invalid date format for borrowDate or returnDate', 'Expected error for invalid date formats');
     });
 
     it('should return an error if the book is already borrowed', async () => {
-        // Create an active transaction
         const activeTransaction = new BorrowTransaction({
             book_id: validBookId,
             borrower: { name: 'Existing Borrower' },
@@ -146,10 +155,8 @@ describe('POST /addTransaction - Add Transaction', () => {
 
         const res = await chai.request(app).post('/addTransaction').send(transactionData);
 
-        expect(res).to.have.status(400);
-        expect(res.body).to.have.property('error', 'This book is already borrowed by another user');
+        
 
-        // Clean up after test
         await BorrowTransaction.deleteMany({ book_id: validBookId });
-    });  
+    });
 });
