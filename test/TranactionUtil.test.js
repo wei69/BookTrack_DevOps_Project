@@ -9,7 +9,7 @@ const assert = require('assert');
 const sinon = require('sinon'); // Add sinon for stubbing
 chai.use(chaiHttp);
 
-describe('POST /addTransaction - Add Transaction with Stubbing', () => {
+describe('Unit Tests backend for Book Transaction API with Stubbing and Isolated MongoDB', () => {
     let validBookId;
     let mongoServer;
 

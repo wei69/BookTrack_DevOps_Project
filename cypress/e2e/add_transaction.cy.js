@@ -1,4 +1,4 @@
-describe('Add Library Book Borrowing Modal', () => {
+describe('Library Book Borrowing Form Frontend Tests', () => {
   let baseUrl;
 
   // Start the server once before all tests
