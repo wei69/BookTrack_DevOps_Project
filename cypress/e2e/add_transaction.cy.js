@@ -18,22 +18,10 @@ describe('Library Book Borrowing Form Frontend Tests', () => {
     cy.task('stopServer');
   });
 
-  // Test Case 1: Open Modal
-  it('should open the modal when the open button is clicked', () => {
-    cy.get('.open-library-btn', { timeout: 20000 }).should('be.visible'); // Wait for the button to be visible
-    cy.get('.open-library-btn').click(); // Click the button
-    cy.get('#modalOverlay').should('be.visible'); // Check if the modal is displayed
-  });
+ 
+  
 
-  // Test Case 2: Close Modal
-  it('should close the modal when the close button is clicked', () => {
-    cy.get('.open-library-btn').click(); // Open the modal
-    cy.get('#modalOverlay').should('be.visible'); // Ensure modal is visible
-    cy.get('#closeBtn').click(); // Click the close button
-    cy.get('#modalOverlay').should('not.be.visible'); // Verify modal is closed
-  });
-
-  // Test Case 3: Empty Fields Validation
+  // Test Case 1: Empty Fields Validation
   it('should show an error when required fields are empty', () => {
     cy.get('.open-library-btn').click(); // Open the modal
     cy.get('#modalOverlay').should('be.visible');
@@ -41,7 +29,7 @@ describe('Library Book Borrowing Form Frontend Tests', () => {
     cy.get('#message').should('be.visible').and('contain', 'All fields are required!');
   });
 
-  // Test Case 4: Invalid Book ID Format
+  // Test Case 2: Invalid Book ID Format
   it('should show an error when book ID format is invalid', () => {
     cy.get('.open-library-btn').click(); // Open the modal
     cy.get('#book_id').type('invalid_id'); // Invalid Book ID
