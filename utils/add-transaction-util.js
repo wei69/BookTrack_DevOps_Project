@@ -38,9 +38,7 @@ async function addTransaction(req, res) {
             returnDate: { $gte: now },
         });
 
-        if (activeTransaction) {
-            return res.status(400).json({ error: 'This book is already borrowed by another user' });
-        }
+        
 
         // Create and save the new transaction
         const newTransaction = new BorrowTransaction({
