@@ -35,8 +35,10 @@ async function addTransaction(req, res) {
         const now = new Date();
         const activeTransaction = await BorrowTransaction.findOne({
             book_id: book._id,
-            returnDate: { $gte: now },
+            returnDate: { $gte: now }, // Active transaction (return date in the future)
         });
+
+        
 
         
 
