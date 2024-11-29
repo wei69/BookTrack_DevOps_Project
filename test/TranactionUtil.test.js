@@ -136,27 +136,17 @@ describe('Unit Tests backend for Book Transaction API with Stubbing and Isolated
         assert.strictEqual(res.body.error, 'Invalid date format for borrowDate or returnDate', 'Expected error for invalid date formats');
     });
 
-    it('should return an error if the book is already borrowed', async () => {
-        const activeTransaction = new BorrowTransaction({
-            book_id: validBookId,
-            borrower: { name: 'Existing Borrower' },
-            borrowDate: new Date(),
-            returnDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-        });
-
-        await activeTransaction.save();
-
+    it('should return an error if the borrower name is missing', async () => {
         const transactionData = {
             book_id: validBookId,
-            borrower_name: 'Jane Doe',
+            borrower_name: '',
             borrowDate: new Date().toISOString(),
             returnDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
         };
 
         const res = await chai.request(app).post('/addTransaction').send(transactionData);
 
-        
-
-        await BorrowTransaction.deleteMany({ book_id: validBookId });
+        assert.strictEqual(res.status, 400);
+        assert.strictEqual(res.body.error, 'Borrower name is required');
     });
 });
