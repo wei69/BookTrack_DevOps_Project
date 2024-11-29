@@ -38,7 +38,11 @@ async function addTransaction(req, res) {
             return res.status(400).json({ error: errorMessage });
         }
     
-        
+       
+
+        if (borrowDateObj >= returnDateObj) {
+            return res.status(400).json({ error: 'borrowDate must be before returnDate' });
+        }
 
         // Create and save the new transaction
         const newTransaction = new BorrowTransaction({
@@ -51,7 +55,8 @@ async function addTransaction(req, res) {
         await newTransaction.save();
         res.status(200).json({ message: 'Transaction added successfully!' });
     } catch (error) {
-     
+        console.error(error);  // Log the error for debugging
+        res.status(500).json({ error: 'Something went wrong. Please try again later.' });  // Send a 500 Internal Server Error response
     }
 }
 
