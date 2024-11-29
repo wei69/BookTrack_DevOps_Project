@@ -33,6 +33,7 @@ describe('Unit Tests backend for Book Transaction API with Stubbing and Isolated
 
             await BorrowTransaction.deleteMany({ book_id: validBookId });
 
+            // Stub the necessary methods
             sinon.stub(Book, 'findById').callsFake(async (id) => {
                 if (id.toString() === validBookId.toString()) {
                     return { _id: validBookId, title: 'Sample Book', author: 'Sample Author' };
@@ -43,19 +44,13 @@ describe('Unit Tests backend for Book Transaction API with Stubbing and Isolated
             sinon.stub(BorrowTransaction, 'findOne').callsFake(async (query) => {
                 return null;
             });
-
-            sinon.stub(BorrowTransaction.prototype, 'save').resolves({
-                book_id: validBookId,
-                borrower: { name: 'John Doe' },
-                borrowDate: new Date(),
-                returnDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-            });
         } catch (error) {
             console.log("Error during setup:", error);
         }
     });
 
     after(async () => {
+        // Stop mongo server and close the app
         await mongoServer.stop();
         await new Promise((resolve, reject) => {
             server.close((err) => {
@@ -66,7 +61,19 @@ describe('Unit Tests backend for Book Transaction API with Stubbing and Isolated
         await mongoose.disconnect();
     });
 
+    afterEach(() => {
+        // Restore all stubs after each test to avoid interference with other tests
+        sinon.restore();
+    });
+
     it('should successfully add a transaction with valid data', async () => {
+        const saveStub = sinon.stub(BorrowTransaction.prototype, 'save').resolves({
+            book_id: validBookId,
+            borrower: { name: 'John Doe' },
+            borrowDate: new Date(),
+            returnDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+        });
+
         const transactionData = {
             book_id: validBookId,
             borrower_name: 'John Doe',
@@ -78,6 +85,27 @@ describe('Unit Tests backend for Book Transaction API with Stubbing and Isolated
 
         assert.strictEqual(res.status, 200, 'Expected status to be 200');
         assert.strictEqual(res.body.message, 'Transaction added successfully!', 'Expected success message');
+
+        saveStub.restore(); // Restore stub after the test
+    });
+
+    it('should return a 500 error when there is a server issue (simulated)', async () => {
+        const saveStub = sinon.stub(BorrowTransaction.prototype, 'save').throws(new Error('Simulated server error'));
+
+        const transactionData = {
+            book_id: validBookId,
+            borrower_name: 'John Doe',
+            borrowDate: new Date().toISOString(),
+            returnDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+        };
+
+        // Send the request that should fail
+        const res = await chai.request(app).post('/addTransaction').send(transactionData);
+
+        assert.strictEqual(res.status, 500, 'Expected status to be 500');
+        assert.strictEqual(res.body.error, 'Something went wrong. Please try again later.', 'Expected error message for internal server error');
+
+        saveStub.restore(); // Restore stub after the test
     });
 
     it('should return an error if the book does not exist', async () => {
@@ -147,5 +175,22 @@ describe('Unit Tests backend for Book Transaction API with Stubbing and Isolated
 
         assert.strictEqual(res.status, 400);
         assert.strictEqual(res.body.error, 'please fill in all field');
+    });
+
+    it('should return an error if borrowDate and returnDate are the same day', async () => {
+        const borrowDate = new Date();
+        const returnDate = new Date(borrowDate); // Set returnDate to be the same as borrowDate
+    
+        const transactionData = {
+            book_id: validBookId,
+            borrower_name: 'John Smith',
+            borrowDate: borrowDate.toISOString(),
+            returnDate: returnDate.toISOString(),
+        };
+    
+        const res = await chai.request(app).post('/addTransaction').send(transactionData);
+    
+        assert.strictEqual(res.status, 400, 'Expected status to be 400');
+        assert.strictEqual(res.body.error, 'borrowDate must be before returnDate', 'Expected error message for same borrowDate and returnDate');
     });
 });
