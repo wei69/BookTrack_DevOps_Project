@@ -6,11 +6,12 @@ async function addTransaction(req, res) {
     const { book_id, borrower_name, borrowDate, returnDate } = req.body;
 
     // Validate all required fields
-    if (!book_id || !borrower_name || !borrowDate || !returnDate) {
-        const errorMessage = 'Borrower name is required';
+    if (!book_id  || !borrowDate || !returnDate) {
+        const errorMessage = 'please fill in all field';
         return res.status(400).json({ error: errorMessage });
     }
-
+    
+    
     try {
         // Validate book ID format
         if (!mongoose.Types.ObjectId.isValid(book_id)) {
@@ -31,15 +32,12 @@ async function addTransaction(req, res) {
             return res.status(400).json({ error: 'Invalid date format for borrowDate or returnDate' });
         }
 
-        // Check if the book is already borrowed (active transaction)
-        const now = new Date();
-        const activeTransaction = await BorrowTransaction.findOne({
-            book_id: book._id,
-            returnDate: { $gte: now }, // Active transaction (return date in the future)
-        });
-
         
-
+        if(!borrower_name){
+            const errorMessage = 'Borrower name is required';
+            return res.status(400).json({ error: errorMessage });
+        }
+    
         
 
         // Create and save the new transaction
