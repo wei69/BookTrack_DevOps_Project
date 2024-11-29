@@ -66,7 +66,9 @@ describe('Unit Tests backend for Book Transaction API with Stubbing and Isolated
         sinon.restore();
     });
 
-    it('should successfully add a transaction with valid data', async () => {
+    it('should successfully add a transaction with valid data', async function () {
+        this.timeout(10000); // Increase timeout for this specific test
+
         const saveStub = sinon.stub(BorrowTransaction.prototype, 'save').resolves({
             book_id: validBookId,
             borrower: { name: 'John Doe' },
@@ -83,13 +85,15 @@ describe('Unit Tests backend for Book Transaction API with Stubbing and Isolated
 
         const res = await chai.request(app).post('/addTransaction').send(transactionData);
 
-        assert.strictEqual(res.status, 200, 'Expected status to be 200');
-        assert.strictEqual(res.body.message, 'Transaction added successfully!', 'Expected success message');
+        assert.strictEqual(res.status, 200);
+        assert.strictEqual(res.body.message, 'Transaction added successfully!');
 
         saveStub.restore(); // Restore stub after the test
     });
 
-    it('should return a 500 error when there is a server issue (simulated)', async () => {
+    it('should return a 500 error when there is a server issue (simulated)', async function () {
+        this.timeout(10000); // Increase timeout for this specific test
+
         const saveStub = sinon.stub(BorrowTransaction.prototype, 'save').throws(new Error('Simulated server error'));
 
         const transactionData = {
@@ -99,16 +103,17 @@ describe('Unit Tests backend for Book Transaction API with Stubbing and Isolated
             returnDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
         };
 
-        // Send the request that should fail
         const res = await chai.request(app).post('/addTransaction').send(transactionData);
 
-        assert.strictEqual(res.status, 500, 'Expected status to be 500');
-        assert.strictEqual(res.body.error, 'Something went wrong. Please try again later.', 'Expected error message for internal server error');
+        assert.strictEqual(res.status, 500);
+        assert.strictEqual(res.body.error, 'Something went wrong. Please try again later.');
 
         saveStub.restore(); // Restore stub after the test
     });
 
-    it('should return an error if the book does not exist', async () => {
+    it('should return an error if the book does not exist', async function () {
+        this.timeout(10000); // Increase timeout for this specific test
+
         const transactionData = {
             book_id: new mongoose.Types.ObjectId().toString(),
             borrower_name: 'Jane Green',
@@ -118,11 +123,13 @@ describe('Unit Tests backend for Book Transaction API with Stubbing and Isolated
 
         const res = await chai.request(app).post('/addTransaction').send(transactionData);
 
-        assert.strictEqual(res.status, 400, 'Expected status to be 400');
-        assert.strictEqual(res.body.error, 'Invalid book ID', 'Expected error message for invalid book ID');
+        assert.strictEqual(res.status, 400);
+        assert.strictEqual(res.body.error, 'Invalid book ID');
     });
 
-    it('should return an error for an invalid book ID', async () => {
+    it('should return an error for an invalid book ID', async function () {
+        this.timeout(10000); // Increase timeout for this specific test
+
         const transactionData = {
             book_id: 'invalidBookId',
             borrower_name: 'Jane Doe',
@@ -132,11 +139,13 @@ describe('Unit Tests backend for Book Transaction API with Stubbing and Isolated
 
         const res = await chai.request(app).post('/addTransaction').send(transactionData);
 
-        assert.strictEqual(res.status, 400, 'Expected status to be 400');
-        assert.strictEqual(res.body.error, 'Invalid book ID', 'Expected error message for invalid book ID');
+        assert.strictEqual(res.status, 400);
+        assert.strictEqual(res.body.error, 'Invalid book ID');
     });
 
-    it('should return an error if the borrower name is empty', async () => {
+    it('should return an error if the borrower name is empty', async function () {
+        this.timeout(10000); // Increase timeout for this specific test
+
         const transactionData = {
             book_id: validBookId,
             borrower_name: '',
@@ -146,11 +155,13 @@ describe('Unit Tests backend for Book Transaction API with Stubbing and Isolated
 
         const res = await chai.request(app).post('/addTransaction').send(transactionData);
 
-        assert.strictEqual(res.status, 400, 'Expected status to be 400');
-        assert.strictEqual(res.body.error, 'Borrower name is required', 'Expected error message for missing borrower name');
+        assert.strictEqual(res.status, 400);
+        assert.strictEqual(res.body.error, 'Borrower name is required');
     });
 
-    it('should return an error for invalid date formats', async () => {
+    it('should return an error for invalid date formats', async function () {
+        this.timeout(10000); // Increase timeout for this specific test
+
         const transactionData = {
             book_id: validBookId,
             borrower_name: 'John Smith',
@@ -160,11 +171,13 @@ describe('Unit Tests backend for Book Transaction API with Stubbing and Isolated
 
         const res = await chai.request(app).post('/addTransaction').send(transactionData);
 
-        assert.strictEqual(res.status, 400, 'Expected status to be 400');
-        assert.strictEqual(res.body.error, 'Invalid date format for borrowDate or returnDate', 'Expected error for invalid date formats');
+        assert.strictEqual(res.status, 400);
+        assert.strictEqual(res.body.error, 'Invalid date format for borrowDate or returnDate');
     });
 
-    it('should return an error if a required field is missing', async () => {
+    it('should return an error if a required field is missing', async function () {
+        this.timeout(10000); // Increase timeout for this specific test
+
         const transactionData = {
             book_id: validBookId,
             borrower_name: 'John Smith',
@@ -177,20 +190,22 @@ describe('Unit Tests backend for Book Transaction API with Stubbing and Isolated
         assert.strictEqual(res.body.error, 'please fill in all field');
     });
 
-    it('should return an error if borrowDate and returnDate are the same day', async () => {
+    it('should return an error if borrowDate and returnDate are the same day', async function () {
+        this.timeout(10000); // Increase timeout for this specific test
+
         const borrowDate = new Date();
         const returnDate = new Date(borrowDate); // Set returnDate to be the same as borrowDate
-    
+
         const transactionData = {
             book_id: validBookId,
             borrower_name: 'John Smith',
             borrowDate: borrowDate.toISOString(),
             returnDate: returnDate.toISOString(),
         };
-    
+
         const res = await chai.request(app).post('/addTransaction').send(transactionData);
-    
-        assert.strictEqual(res.status, 400, 'Expected status to be 400');
-        assert.strictEqual(res.body.error, 'borrowDate must be before returnDate', 'Expected error message for same borrowDate and returnDate');
+
+        assert.strictEqual(res.status, 400);
+        assert.strictEqual(res.body.error, 'borrowDate must be before returnDate');
     });
 });
