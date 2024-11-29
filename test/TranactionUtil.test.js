@@ -108,7 +108,7 @@ describe('Unit Tests backend for Book Transaction API with Stubbing and Isolated
         assert.strictEqual(res.body.error, 'Invalid book ID', 'Expected error message for invalid book ID');
     });
 
-    it('should return an error if the borrower name is missing', async () => {
+    it('should return an error if the borrower name is empty', async () => {
         const transactionData = {
             book_id: validBookId,
             borrower_name: '',
@@ -136,17 +136,16 @@ describe('Unit Tests backend for Book Transaction API with Stubbing and Isolated
         assert.strictEqual(res.body.error, 'Invalid date format for borrowDate or returnDate', 'Expected error for invalid date formats');
     });
 
-    it('should return an error if the borrower name is missing', async () => {
+    it('should return an error if a required field is missing', async () => {
         const transactionData = {
             book_id: validBookId,
-            borrower_name: '',
-            borrowDate: new Date().toISOString(),
+            borrower_name: 'John Smith',
             returnDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
         };
 
         const res = await chai.request(app).post('/addTransaction').send(transactionData);
 
         assert.strictEqual(res.status, 400);
-        assert.strictEqual(res.body.error, 'Borrower name is required');
+        assert.strictEqual(res.body.error, 'please fill in all field');
     });
 });
