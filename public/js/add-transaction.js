@@ -8,7 +8,8 @@ function displayMessage(message, type) {
     if (type === "success") {
         messageElement.style.color = "green"; // Success message color
     } else if (type === "error") {
-        messageElement.style.color = "red"; // Error message color
+        messageElement.style.color = "red";
+         // Error message color
     } 
 
     // Hide the message after a few seconds

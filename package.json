@@ -7,7 +7,10 @@
     "backend-test": "nyc --nycrc-path .nycrc-backend mocha",
     "frontend-instrument": "xcopy public instrumented /I /E /Y & nyc instrument public instrumented",
     "frontend-test": "rmdir -r .nyc_output & nyc --nycrc-path .nycrc-frontend cypress run --browser firefox --browser chrome",
-
+    "test:chrome": "cypress run --browser chrome",
+    "test:firefox": "cypress run --browser firefox",
+    "test:edge": "cypress run --browser edge",
+    "test:all": "npm run test:chrome && npm run test:firefox && npm run test:edge",
     "start": "nodemon index.js"
   },
   "keywords": [],
