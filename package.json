@@ -10,7 +10,8 @@
     "test:chrome": "cypress run --browser chrome",
     "test:firefox": "cypress run --browser firefox",
     "test:edge": "cypress run --browser edge",
-    "test:all": "npm run test:chrome && npm run test:firefox && npm run test:edge",
+    "test:electron": "cypress run --browser electron",
+    "test:all": "npm run test:chrome && npm run test:firefox && npm run test:edge && npm run test:electron",
     "start": "nodemon index.js"
   },
   "keywords": [],
@@ -36,6 +37,9 @@
     "@babel/preset-env": "^7.26.0",
     "@cypress/code-coverage": "^3.13.7",
     "babel-plugin-istanbul": "^7.0.0",
+    "mochawesome": "^7.1.3",
+    "mochawesome-merge": "^4.3.0",
+    "mochawesome-report-generator": "^6.2.0",
     "nyc": "^17.1.0"
   }
 }
