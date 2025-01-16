@@ -3,7 +3,7 @@ services:
    build:
      context: .
      dockerfile: Dockerfile 
-   image: weilong12/rms-docker-img:v3
+   image: weilong12/rms-docker-img:v4
    container_name: rms-docker-container_library_management
    ports:
      - "8000:5500"
