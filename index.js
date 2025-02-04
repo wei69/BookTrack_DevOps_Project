@@ -7,7 +7,7 @@ const cors = require('cors');                             // Import cors to enab
 const { addBook} = require('./utils/add-book-util.js');   // Import the addBook function for handling book addition
 const { addTransaction } = require("./utils/add-transaction-util.js");
 const { updateBook,fetchBookById } = require('./utils/update-book-util.js'); // Import the utility functions for updating books
-
+const logger = require('./logger');
 
  // Import the utility functions for updating books
 
@@ -31,7 +31,8 @@ app.use(bodyParser.json());
 
 // Serve static files from the 'public' directory (e.g., HTML, CSS, JS)
 app.use(express.static('./public'));
-
+const statusMonitor = require('express-status-monitor');
+app.use(statusMonitor());
 // Connect to MongoDB using the MONGODB_URI environment variable from .env file
 mongoose.connect(
     process.env.MONGODB_URI,
@@ -63,6 +64,8 @@ const server = app.listen(PORT, function () {
     const address = server.address();
     // Construct the base URL, defaulting to 'localhost' if IPv6 loopback address is used
     const baseUrl = `http://${address.address === '::' ? 'localhost' : address.address}:${address.port}`;
+    logger.info(`Demo project at: ${baseUrl}!`);
+    logger.error(`Example or error log`);
     console.log(`BookTrack app running at: ${baseUrl}`);
 });
 
