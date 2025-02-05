@@ -4,16 +4,14 @@ const bodyParser = require('body-parser');                // Import body-parser 
 const multer = require('multer');                         // Import multer for handling file uploads
 const mongoose = require('mongoose');                     // Import mongoose for MongoDB interaction
 const cors = require('cors');                             // Import cors to enable Cross-Origin Resource Sharing
-const { addBook} = require('./utils/add-book-util.js');   // Import the addBook function for handling book addition
+const { addBook } = require('./utils/add-book-util.js');   // Import the addBook function for handling book addition
 const { addTransaction } = require("./utils/add-transaction-util.js");
-const { updateBook,fetchBookById } = require('./utils/update-book-util.js'); // Import the utility functions for updating books
+const { updateBook, fetchBookById } = require('./utils/update-book-util.js'); // Import the utility functions for updating books
 const logger = require('./logger');
+const promClient = require('prom-client'); // Import the Prometheus client
 
- // Import the utility functions for updating books
-
-const { getBooks} = require('./utils/get-book-util'); // Import the getBooks function for fetching books
-
-
+// Import the utility functions for updating books
+const { getBooks } = require('./utils/get-book-util'); // Import the getBooks function for fetching books
 const { searchBooks } = require('./utils/search-book-util'); // Import the searchBooks function for searching books
 const Book = require('./models/book.js'); // Import your Book model
 
@@ -33,17 +31,18 @@ app.use(bodyParser.json());
 app.use(express.static('./public'));
 const statusMonitor = require('express-status-monitor');
 app.use(statusMonitor());
+
 // Connect to MongoDB using the MONGODB_URI environment variable from .env file
 mongoose.connect(
     process.env.MONGODB_URI,
 ).then(() => console.log('Connected to MongoDB Atlas'))
   .catch((error) => console.error('Error connecting to MongoDB:', error));
 
-  // Set up multer to store uploaded files in memory as buffer objects
+// Set up multer to store uploaded files in memory as buffer objects
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage }); // Create an upload handler with memory storage
 
-app.post('/addBook', upload.single('image'), addBook);// Define a POST route for adding a new book, expecting a single file upload under the 'image' field
+app.post('/addBook', upload.single('image'), addBook); // Define a POST route for adding a new book, expecting a single file upload under the 'image' field
 app.get('/books', getBooks); // Use the getBooks function directly
 app.get('/search', searchBooks); // Define a route for searching books
 
@@ -53,9 +52,27 @@ app.get('/books/:id', fetchBookById);
 app.put('/updateBook/:id', upload.single('image'), updateBook);
 
 app.post('/addTransaction', addTransaction);
+
 // Define a route to serve the main HTML page at the root URL
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/public/' + startPage); // Send the 'index.html' file as a response
+});
+
+// Prometheus Metrics Configuration
+const collectDefaultMetrics = promClient.collectDefaultMetrics;
+collectDefaultMetrics(); // Collect default metrics like node.js memory usage, event loop delay, etc.
+
+// Define a route for Prometheus to scrape the metrics
+app.get('/metrics', async (req, res) => {
+    try {
+        // Get all registered metrics
+        const metrics = await promClient.register.metrics();
+        res.set('Content-Type', promClient.register.contentType);
+        res.send(metrics);
+    } catch (err) {
+        console.error('Error fetching metrics:', err);
+        res.status(500).send('Error fetching metrics');
+    }
 });
 
 // Start the server on the defined PORT
