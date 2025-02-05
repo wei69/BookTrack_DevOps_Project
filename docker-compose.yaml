@@ -1,10 +1,48 @@
+
 services:
- build-rms:
-   build:
-     context: .
-     dockerfile: Dockerfile 
-   image: weilong12/rms-docker-img:v5
-   container_name: rms-docker-container_library_management
-   ports:
-     - "8000:5500"
-     
+  # Your existing RMS service
+  build-rms:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: weilong12/rms-docker-img:v6
+    container_name: rms-docker-container_library_management
+    ports:
+      - "8000:5500"  # Expose your app's port (5500 inside container to 8000 on host)
+    networks:
+      - monitoring-network  # Add to monitoring network for Prometheus to scrape
+
+  # Prometheus service to monitor your application
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml  # Configuration file for Prometheus
+    ports:
+      - "9090:9090"  # Expose Prometheus UI on port 9090
+    networks:
+      - monitoring-network  # Same network to ensure Prometheus can scrape the RMS app
+
+  # Optional: Scrape node system metrics (useful for monitoring host system)
+  node-exporter:
+    image: prom/node-exporter
+    container_name: node-exporter
+    ports:
+      - "9100:9100"  # Expose node-exporter metrics on port 9100
+    networks:
+      - monitoring-network  # Same network for Prometheus to scrape node-exporter metrics
+
+  # Optional: Grafana for visualizing Prometheus metrics
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    ports:
+      - "3000:3000"  # Expose Grafana UI on port 3000
+    depends_on:
+      - prometheus  # Ensure Grafana starts after Prometheus is ready
+    networks:
+      - monitoring-network  # Same network for Grafana to access Prometheus
+
+networks:
+  monitoring-network:
+    driver: bridge
