@@ -5,22 +5,22 @@ scrape_configs:
   # Scrape Prometheus itself
   - job_name: "prometheus"
     static_configs:
-      - targets: ["130.131.171.47:9090"]  # Prometheus external IP
+      - targets: ["localhost:9090"]  # Prometheus instance
 
   # Scrape Jenkins Metrics
   - job_name: "jenkins"
     static_configs:
-      - targets: ["130.131.171.47:8080"]  # Jenkins external IP
+      - targets: ["jenkins:8080"]  # Replace with Jenkins container hostname
     metrics_path: "/metrics"
 
   # Scrape RMS Application Metrics
   - job_name: "rms-app"
     static_configs:
-      - targets: ["130.131.171.47:5500"]  # RMS external IP
+      - targets: ["build-rms:5500"]  # Replace with RMS app hostname
     metrics_path: "/metrics"
 
   # Scrape Node System Metrics
   - job_name: "node"
     static_configs:
-      - targets: ["130.131.171.47:9100"]  # Node Exporter external IP
+      - targets: ["node-exporter:9100"]  # Node Exporter container hostname
     metrics_path: "/metrics"
