@@ -2,14 +2,25 @@ global:
   scrape_interval: 15s  # Scrape every 15 seconds
 
 scrape_configs:
-  # Scrape RMS application metrics
-  - job_name: 'rms-app'
+  # Scrape Prometheus itself
+  - job_name: "prometheus"
     static_configs:
-      - targets: ['build-rms:5500']  # Your RMS app's internal Docker container and port
-    metrics_path: /metrics  # Ensure your app exposes the metrics at this endpoint
+      - targets: ["130.131.171.47:9090"]  # Prometheus external IP
 
-  # Scrape node system metrics (optional)
-  - job_name: 'node'
+  # Scrape Jenkins Metrics
+  - job_name: "jenkins"
     static_configs:
-      - targets: ['node-exporter:9100']  # Your node-exporter container
-    metrics_path: /metrics  # Ensure node-exporter exposes metrics at this endpoint
+      - targets: ["130.131.171.47:8080"]  # Jenkins external IP
+    metrics_path: "/metrics"
+
+  # Scrape RMS Application Metrics
+  - job_name: "rms-app"
+    static_configs:
+      - targets: ["130.131.171.47:5500"]  # RMS external IP
+    metrics_path: "/metrics"
+
+  # Scrape Node System Metrics
+  - job_name: "node"
+    static_configs:
+      - targets: ["130.131.171.47:9100"]  # Node Exporter external IP
+    metrics_path: "/metrics"
