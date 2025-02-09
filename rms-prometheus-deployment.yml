@@ -2,7 +2,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: prometheus
-  namespace: default  # Change to your namespace if needed
+  namespace: default  # Ensure this matches the namespace in your ConfigMap
+  labels:
+    app: prometheus
 spec:
   replicas: 1
   selector:
@@ -16,13 +18,17 @@ spec:
       containers:
         - name: prometheus
           image: prom/prometheus:latest
+          args:
+            - "--config.file=/etc/prometheus/prometheus.yml"
           ports:
             - containerPort: 9090
           volumeMounts:
             - name: prometheus-config-volume
-              mountPath: /etc/prometheus/prometheus.yml
-              subPath: prometheus.yml
+              mountPath: /etc/prometheus/
       volumes:
         - name: prometheus-config-volume
           configMap:
-            name: prometheus-config  # Refers to the ConfigMap created above
+            name: prometheus-config
+            items:
+              - key: prometheus.yml
+                path: prometheus.yml
