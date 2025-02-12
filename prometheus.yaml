@@ -27,3 +27,9 @@ data:
         static_configs:
           - targets: ["node-exporter:9100"]  # Node Exporter container hostname
         metrics_path: "/metrics"
+
+      - job_name: "booktracker"
+        static_configs:
+         - targets: ["http://130.131.171.47"]
+         # Node Exporter container hostname
+       
